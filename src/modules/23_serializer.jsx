@@ -343,8 +343,9 @@ Serializer.XARROW_CHAR = { right: '\u2192', left: '\u2190', leftright: '\u2194',
 
 Serializer.plainText = function (n) {
     var P = Serializer.plainText, s, i, r, rows, t, m;
-    function wrap(row) {
-        var x = P(row);
+    /* wrap(row[, text]): pass already-computed text so each subtree is converted once (avoids exponential cost on nesting) */
+    function wrap(row, x) {
+        if (x === undefined) { x = P(row); }
         return (row.items.length > 1) ? '(' + x + ')' : x;
     }
     if (!n) { return ''; }
@@ -365,16 +366,19 @@ Serializer.plainText = function (n) {
     case 'frac': return wrap(n.num) + '/' + wrap(n.den);
     case 'binom': return 'C(' + P(n.top) + ', ' + P(n.bottom) + ')';
     case 'root':
-        t = n.index ? (Serializer.mapScript(P(n.index), Serializer.SUP) || ('(' + P(n.index) + ')')) : '';
-        if (n.index && P(n.index) === '3') { return '\u221B' + wrap(n.body); }
-        if (n.index && P(n.index) === '4') { return '\u221C' + wrap(n.body); }
+        m = n.index ? P(n.index) : '';
+        t = n.index ? (Serializer.mapScript(m, Serializer.SUP) || ('(' + m + ')')) : '';
+        if (n.index && m === '3') { return '\u221B' + wrap(n.body); }
+        if (n.index && m === '4') { return '\u221C' + wrap(n.body); }
         return t + '\u221A' + wrap(n.body);
     case 'scripts':
-        s = (n.presup ? (Serializer.mapScript(P(n.presup), Serializer.SUP) || '^' + wrap(n.presup)) : '') +
-            (n.presub ? (Serializer.mapScript(P(n.presub), Serializer.SUB) || '_' + wrap(n.presub)) : '');
-        s += (n.base.items.length > 1 ? '(' + P(n.base) + ')' : P(n.base));
-        if (n.sub) { t = P(n.sub); s += Serializer.mapScript(t, Serializer.SUB) || ('_' + wrap(n.sub)); }
-        if (n.sup) { t = P(n.sup); s += (/^[\u2032\u2033\u2034]+$/.test(t) ? t : (Serializer.mapScript(t, Serializer.SUP) || ('^' + wrap(n.sup)))); }
+        s = '';
+        if (n.presup) { t = P(n.presup); s += Serializer.mapScript(t, Serializer.SUP) || '^' + wrap(n.presup, t); }
+        if (n.presub) { t = P(n.presub); s += Serializer.mapScript(t, Serializer.SUB) || '_' + wrap(n.presub, t); }
+        t = P(n.base);
+        s += (n.base.items.length > 1 ? '(' + t + ')' : t);
+        if (n.sub) { t = P(n.sub); s += Serializer.mapScript(t, Serializer.SUB) || ('_' + wrap(n.sub, t)); }
+        if (n.sup) { t = P(n.sup); s += (/^[\u2032\u2033\u2034]+$/.test(t) ? t : (Serializer.mapScript(t, Serializer.SUP) || ('^' + wrap(n.sup, t)))); }
         return s;
     case 'fenced': return n.left + P(n.body) + n.right;
     case 'matrix':

@@ -388,6 +388,16 @@ Layout.isSingleChar = function (row) {
     return row.items.length === 1 && (row.items[0].type === 'variable' || row.items[0].type === 'number' && row.items[0].text.length === 1 ||
         row.items[0].type === 'symbol');
 };
+/* True when a row holds only prime marks (cheap check; no subtree conversion). */
+Layout.isPrimeRow = function (row) {
+    var i, it;
+    if (!row || !row.items.length || row.items.length > 4) { return false; }
+    for (i = 0; i < row.items.length; i++) {
+        it = row.items[i];
+        if ((it.type !== 'symbol' && it.type !== 'operator') || !/^[\u2032\u2033\u2034]+$/.test(it.text || '')) { return false; }
+    }
+    return true;
+};
 Layout.scripts = function (n, ctx) {
     var s = ctx.size, base, sup = null, sub = null, presup = null, presub = null, sc = Layout.STYLE_DOWN_SCRIPT[ctx.style],
         csup = Layout.ctxWith(ctx, { style: sc }), csub = Layout.ctxWith(ctx, { style: sc, cramped: true }), u = 0, v = 0, b, x0 = 0,
@@ -403,7 +413,7 @@ Layout.scripts = function (n, ctx) {
     if (sup || presup) {
         u = single ? 0 : base.a - 0.38 * ss;
         u = Math.max(u, ctx.cramped ? 0.36 * s : 0.42 * s, (sup ? sup.d : presup.d) + 0.12 * s);
-        if (sup && sup.items === undefined && n.sup.items.length && /^[\u2032\u2033\u2034]+$/.test(Serializer.plainText(n.sup))) { u = Math.max(u - 0.12 * s, 0.2 * s); }
+        if (sup && sup.items === undefined && n.sup.items.length && Layout.isPrimeRow(n.sup)) { u = Math.max(u - 0.12 * s, 0.2 * s); }
         u += ctx.set.supOffset * s;
     }
     if (sub || presub) {

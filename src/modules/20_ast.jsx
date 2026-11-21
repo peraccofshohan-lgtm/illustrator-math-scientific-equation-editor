@@ -204,8 +204,9 @@ AST.equal = function (a, b) { return AST.canonical(a) === AST.canonical(b); };
 /* ---- Validation ----------------------------------------------------------- */
 /* Strict schema validation for any tree that comes from storage/import.
    Throws MathError on failure. Never evaluates anything. */
+AST.MAX_NODES = 60000;   /* a full 100 x 100 matrix needs ~20-30k nodes */
 AST.validate = function (root, maxNodes) {
-    var count = 0, limit = maxNodes || 20000;
+    var count = 0, limit = maxNodes || AST.MAX_NODES;
     function fail(msg) { throw new MathError(ErrorKind.STRUCTURE, msg); }
     function str(v, name, maxLen) {
         if (typeof v !== 'string') { fail(name + ' must be text'); }

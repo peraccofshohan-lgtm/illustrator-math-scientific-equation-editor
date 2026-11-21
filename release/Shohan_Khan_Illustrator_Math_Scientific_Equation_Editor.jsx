@@ -109,9 +109,18 @@ U.round = function (v, d) { var m = Math.pow(10, d || 0); return Math.round(v * 
 U.now = function () { return new Date().getTime(); };
 U.max = function (a, b) { return a > b ? a : b; };
 U.min = function (a, b) { return a < b ? a : b; };
+/* Strict number parsing for user input and stored data: the whole string must
+   be a decimal number (comma accepted as decimal separator). Returns the
+   fallback, or null, for anything else (never NaN / Infinity / undefined). */
 U.toNumber = function (s, fallback) {
-    var n = parseFloat(String(s).replace(',', '.'));
-    return U.isNumber(n) ? n : fallback;
+    var t, n;
+    fallback = (fallback === undefined) ? null : fallback;
+    if (typeof s === 'number') { return (isFinite(s) && !isNaN(s)) ? s : fallback; }
+    if (typeof s !== 'string') { return fallback; }
+    t = U.trim(s).replace(',', '.');
+    if (!/^[+\-]?(\d+\.?\d*|\.\d+)([eE][+\-]?\d+)?$/.test(t)) { return fallback; }
+    n = parseFloat(t);
+    return (isFinite(n) && !isNaN(n)) ? n : fallback;
 };
 U.isoDate = function (t) {
     var d = new Date(t || U.now());
@@ -1639,8 +1648,9 @@ AST.equal = function (a, b) { return AST.canonical(a) === AST.canonical(b); };
 /* ---- Validation ----------------------------------------------------------- */
 /* Strict schema validation for any tree that comes from storage/import.
    Throws MathError on failure. Never evaluates anything. */
+AST.MAX_NODES = 60000;   /* a full 100 x 100 matrix needs ~20-30k nodes */
 AST.validate = function (root, maxNodes) {
-    var count = 0, limit = maxNodes || 20000;
+    var count = 0, limit = maxNodes || AST.MAX_NODES;
     function fail(msg) { throw new MathError(ErrorKind.STRUCTURE, msg); }
     function str(v, name, maxLen) {
         if (typeof v !== 'string') { fail(name + ' must be text'); }
@@ -1910,8 +1920,14 @@ function Parser(src, opts) {
 }
 Parser.MAX_DEPTH = 150;
 
+Parser.MAX_INPUT = 100000;
 Parser.parse = function (src, opts) {
-    var p = new Parser(src, opts);
+    var p;
+    src = (src === null || src === undefined) ? '' : String(src);
+    if (src.length > Parser.MAX_INPUT) {
+        throw new MathError(ErrorKind.PARSER, 'The input is too long (' + src.length + ' characters; the limit is ' + Parser.MAX_INPUT + ').', '', Parser.MAX_INPUT);
+    }
+    p = new Parser(src, opts);
     var root = p.parseTop();
     return { root: root, warnings: p.warnings };
 };
@@ -2227,7 +2243,9 @@ Parser.prototype.parsePrimary = function (stop) {
     if (MathData.isLatinLetter(ch)) {
         if (this.opts.smartFuncs && !stop.single) {
             run = ch; j = 1;
-            while (true) {
+            if (!Parser.MAX_FUNC_LEN) { for (k = 0; k < MathData.BARE_FUNCS.length; k++) { Parser.MAX_FUNC_LEN = Math.max(Parser.MAX_FUNC_LEN || 0, MathData.BARE_FUNCS[k].length); } }
+            /* only scan as far as the longest function name (+1 to detect longer words): keeps parsing linear */
+            while (j <= Parser.MAX_FUNC_LEN) {
                 t2 = this.peek(j);
                 if (t2.t === 'char' && !t2.sp && MathData.isLatinLetter(t2.v)) { run += t2.v; j++; } else { break; }
             }
@@ -2737,14 +2755,16 @@ Serializer.group = function (row) {
 /* Concatenate two LaTeX fragments, inserting a space only when needed so that
    re-lexing yields the same tokens (e.g. "\\langle" + "E"). */
 Serializer.join = function (a, b) {
+    var ta;
     if (a === '' || b === '') { return a + b; }
-    if (/\\[A-Za-z]+\*?$/.test(a) && /^[A-Za-z]/.test(b)) { return a + ' ' + b; }
-    if (/\\$/.test(a) && !/\\\\$/.test(a)) { return a + ' ' + b; }
+    ta = Serializer.tail(a);
+    if (/\\[A-Za-z]+\*?$/.test(ta) && /^[A-Za-z]/.test(b)) { return a + ' ' + b; }
+    if (/\\$/.test(ta) && !/\\\\$/.test(ta)) { return a + ' ' + b; }
     return a + b;
 };
 /* Join row pieces, inserting spaces only where re-lexing would change meaning. */
 Serializer.rowContent = function (row) {
-    var pieces = [], i, out = '', p, prev, needSpace, breaks = {};
+    var pieces = [], i, out = '', p, prev, needSpace, breaks = {}, last = '';
     for (i = 0; i < row.items.length; i++) { pieces.push(Serializer.node(row.items[i])); }
     Serializer.markFunctionBreaks(pieces, breaks);
     for (i = 0; i < pieces.length; i++) {
@@ -2752,7 +2772,8 @@ Serializer.rowContent = function (row) {
         if (p === '') { continue; }
         needSpace = false;
         if (out !== '') {
-            prev = out;
+            /* only the tail of the previous piece matters; testing the whole output would be quadratic */
+            prev = Serializer.tail(last);
             if (/\\[A-Za-z]+\*?$/.test(prev) && /^[A-Za-z]/.test(p)) { needSpace = true; }
             else if (/[0-9.]$/.test(prev) && /^[0-9.]/.test(p)) { needSpace = true; }
             else if (/[<>\-+=!~.]$/.test(prev) && /^[<>\-+=!~.]/.test(p)) { needSpace = true; }
@@ -2760,9 +2781,11 @@ Serializer.rowContent = function (row) {
             else if (breaks[i]) { needSpace = true; }
         }
         out += (needSpace ? ' ' : '') + p;
+        last = p;
     }
     return out;
 };
+Serializer.tail = function (s) { return s.length > 80 ? s.substring(s.length - 80) : s; };
 /* Runs of bare letters that would be re-read as a function name (s i n -> sin)
    are split with a space. Only suffixes matter because the parser scans a run
    from each letter to the end of the run. */
@@ -2970,8 +2993,9 @@ Serializer.XARROW_CHAR = { right: '\u2192', left: '\u2190', leftright: '\u2194',
 
 Serializer.plainText = function (n) {
     var P = Serializer.plainText, s, i, r, rows, t, m;
-    function wrap(row) {
-        var x = P(row);
+    /* wrap(row[, text]): pass already-computed text so each subtree is converted once (avoids exponential cost on nesting) */
+    function wrap(row, x) {
+        if (x === undefined) { x = P(row); }
         return (row.items.length > 1) ? '(' + x + ')' : x;
     }
     if (!n) { return ''; }
@@ -2992,16 +3016,19 @@ Serializer.plainText = function (n) {
     case 'frac': return wrap(n.num) + '/' + wrap(n.den);
     case 'binom': return 'C(' + P(n.top) + ', ' + P(n.bottom) + ')';
     case 'root':
-        t = n.index ? (Serializer.mapScript(P(n.index), Serializer.SUP) || ('(' + P(n.index) + ')')) : '';
-        if (n.index && P(n.index) === '3') { return '\u221B' + wrap(n.body); }
-        if (n.index && P(n.index) === '4') { return '\u221C' + wrap(n.body); }
+        m = n.index ? P(n.index) : '';
+        t = n.index ? (Serializer.mapScript(m, Serializer.SUP) || ('(' + m + ')')) : '';
+        if (n.index && m === '3') { return '\u221B' + wrap(n.body); }
+        if (n.index && m === '4') { return '\u221C' + wrap(n.body); }
         return t + '\u221A' + wrap(n.body);
     case 'scripts':
-        s = (n.presup ? (Serializer.mapScript(P(n.presup), Serializer.SUP) || '^' + wrap(n.presup)) : '') +
-            (n.presub ? (Serializer.mapScript(P(n.presub), Serializer.SUB) || '_' + wrap(n.presub)) : '');
-        s += (n.base.items.length > 1 ? '(' + P(n.base) + ')' : P(n.base));
-        if (n.sub) { t = P(n.sub); s += Serializer.mapScript(t, Serializer.SUB) || ('_' + wrap(n.sub)); }
-        if (n.sup) { t = P(n.sup); s += (/^[\u2032\u2033\u2034]+$/.test(t) ? t : (Serializer.mapScript(t, Serializer.SUP) || ('^' + wrap(n.sup)))); }
+        s = '';
+        if (n.presup) { t = P(n.presup); s += Serializer.mapScript(t, Serializer.SUP) || '^' + wrap(n.presup, t); }
+        if (n.presub) { t = P(n.presub); s += Serializer.mapScript(t, Serializer.SUB) || '_' + wrap(n.presub, t); }
+        t = P(n.base);
+        s += (n.base.items.length > 1 ? '(' + t + ')' : t);
+        if (n.sub) { t = P(n.sub); s += Serializer.mapScript(t, Serializer.SUB) || ('_' + wrap(n.sub, t)); }
+        if (n.sup) { t = P(n.sup); s += (/^[\u2032\u2033\u2034]+$/.test(t) ? t : (Serializer.mapScript(t, Serializer.SUP) || ('^' + wrap(n.sup, t)))); }
         return s;
     case 'fenced': return n.left + P(n.body) + n.right;
     case 'matrix':
@@ -4779,6 +4806,16 @@ Layout.isSingleChar = function (row) {
     return row.items.length === 1 && (row.items[0].type === 'variable' || row.items[0].type === 'number' && row.items[0].text.length === 1 ||
         row.items[0].type === 'symbol');
 };
+/* True when a row holds only prime marks (cheap check; no subtree conversion). */
+Layout.isPrimeRow = function (row) {
+    var i, it;
+    if (!row || !row.items.length || row.items.length > 4) { return false; }
+    for (i = 0; i < row.items.length; i++) {
+        it = row.items[i];
+        if ((it.type !== 'symbol' && it.type !== 'operator') || !/^[\u2032\u2033\u2034]+$/.test(it.text || '')) { return false; }
+    }
+    return true;
+};
 Layout.scripts = function (n, ctx) {
     var s = ctx.size, base, sup = null, sub = null, presup = null, presub = null, sc = Layout.STYLE_DOWN_SCRIPT[ctx.style],
         csup = Layout.ctxWith(ctx, { style: sc }), csub = Layout.ctxWith(ctx, { style: sc, cramped: true }), u = 0, v = 0, b, x0 = 0,
@@ -4794,7 +4831,7 @@ Layout.scripts = function (n, ctx) {
     if (sup || presup) {
         u = single ? 0 : base.a - 0.38 * ss;
         u = Math.max(u, ctx.cramped ? 0.36 * s : 0.42 * s, (sup ? sup.d : presup.d) + 0.12 * s);
-        if (sup && sup.items === undefined && n.sup.items.length && /^[\u2032\u2033\u2034]+$/.test(Serializer.plainText(n.sup))) { u = Math.max(u - 0.12 * s, 0.2 * s); }
+        if (sup && sup.items === undefined && n.sup.items.length && Layout.isPrimeRow(n.sup)) { u = Math.max(u - 0.12 * s, 0.2 * s); }
         u += ctx.set.supOffset * s;
     }
     if (sub || presub) {
@@ -5472,7 +5509,7 @@ Renderer.layerHidden = function (layer) {
 Renderer.makeColor = function (doc, hex) {
     var rgb = U.hexToRgb(hex || '#000000'), c, cmyk;
     if (doc.documentColorSpace === DocumentColorSpace.CMYK) {
-        cmyk = U.rgbToCmyk(rgb[0], rgb[1], rgb[2]);
+        cmyk = U.rgbToCmyk(rgb);
         c = new CMYKColor();
         c.cyan = cmyk[0]; c.magenta = cmyk[1]; c.yellow = cmyk[2]; c.black = cmyk[3];
         return c;
@@ -5527,8 +5564,18 @@ Renderer.IllustratorMetrics = function (container, plan) {
 };
 
 /* ---- Payload stored on the inserted group (for re-editing) ------------------------- */
-Renderer.encodeNote = function (latex, settings, mode) {
-    return MSEE.NOTE_PREFIX + JSONX.stringify({ app: 'MSEE', v: 1, version: MSEE.VERSION, latex: latex, settings: settings, mode: mode });
+Renderer.encodeNote = function (latex, settings, mode, offset) {
+    var data = { app: 'MSEE', v: 1, version: MSEE.VERSION, latex: latex, settings: settings, mode: mode };
+    if (offset) { data.offset = [U.round(offset[0], 3), U.round(offset[1], 3)]; }
+    return MSEE.NOTE_PREFIX + JSONX.stringify(data);
+};
+/* Offset from the item's geometric top-left to the equation's baseline origin;
+   lets "Update" keep the baseline where it was even after the user moved it. */
+Renderer.originOffset = function (item, origin) {
+    var gb;
+    try { gb = item.geometricBounds; } catch (e) { return null; }
+    if (!gb || !isFinite(gb[0]) || !isFinite(gb[1])) { return null; }
+    return [origin[0] - gb[0], origin[1] - gb[1]];
 };
 Renderer.decodeNote = function (note) {
     var data;
@@ -5536,7 +5583,8 @@ Renderer.decodeNote = function (note) {
     try { data = JSONX.parse(note.substring(MSEE.NOTE_PREFIX.length)); } catch (e) { return null; }
     if (!data || typeof data !== 'object' || typeof data.latex !== 'string') { return null; }
     if (data.latex.length > 200000) { return null; }
-    return { latex: data.latex, settings: Formatting.clean(data.settings), mode: U.contains(Renderer.MODES, data.mode) ? data.mode : 'group', version: String(data.version || '') };
+    return { latex: data.latex, settings: Formatting.clean(data.settings), mode: U.contains(Renderer.MODES, data.mode) ? data.mode : 'group', version: String(data.version || ''),
+        offset: (U.isArray(data.offset) && data.offset.length === 2 && U.isNumber(data.offset[0]) && U.isNumber(data.offset[1]) && isFinite(data.offset[0]) && isFinite(data.offset[1])) ? data.offset : null };
 };
 /* Look for an equation in the current selection (the group itself or any item inside it). */
 Renderer.findSelectedEquation = function () {
@@ -5623,7 +5671,10 @@ Renderer.placement = function (doc, layout, opts) {
     var w = layout.width, c, ab, r, gb;
     if (opts.replaceItem) {
         try {
+            if (opts.replaceItem.typename === 'TextFrame' && opts.replaceItem.anchor) { return [opts.replaceItem.anchor[0], opts.replaceItem.anchor[1]]; }
             gb = opts.replaceItem.geometricBounds;   /* [left, top, right, bottom] */
+            r = Renderer.decodeNote(opts.replaceItem.note);
+            if (r && r.offset) { return [gb[0] + r.offset[0], gb[1] + r.offset[1]]; }
             return [gb[0] - Layout.bounds(layout).left, gb[1] - Layout.bounds(layout).top];
         } catch (e) { /* fall through */ }
     }
@@ -5684,7 +5735,7 @@ Renderer.insert = function (root, settings, opts) {
             }
         }
         if (mode === 'outlines') { Renderer.outlineText(group); }
-        group.note = Renderer.encodeNote(opts.latex || Serializer.toLatex(root), settings, mode);
+        group.note = Renderer.encodeNote(opts.latex || Serializer.toLatex(root), settings, mode, Renderer.originOffset(group, origin));
         if (mode === 'components') { item = Renderer.ungroup(group, layer); warnings.push('Separate components cannot be re-edited as one equation.'); }
         else { item = group; }
         if (mode === 'single') { item = Renderer.unwrapSingle(group, layer, opts.latex || Serializer.toLatex(root), settings); }
@@ -6613,6 +6664,7 @@ Store.Library.prototype.addFormula = function (rec, kind) {
     if (!c) { throw new MathError(ErrorKind.VALIDATION, 'The formula is empty or too large.'); }
     if (list.length >= max) { throw new MathError(ErrorKind.VALIDATION, 'The library is full (' + max + ' items). Delete some items first.'); }
     c.id = U.uid(kind === 'template' ? 'ct' : 'f');
+    c.name = Store.uniqueName(this, c.name, kind);
     c.created = c.modified = U.isoDate();
     list.unshift(c);
     return c;
@@ -6623,7 +6675,7 @@ Store.Library.prototype.updateFormula = function (id, patch) {
     if (U.has(patch, 'latex')) { this.validateLatex(patch.latex); }
     for (k in patch) {
         if (!U.has(patch, k)) { continue; }
-        if (k === 'name') { f.name = U.trim(Store.str(patch.name, Store.LIMITS.name)) || f.name; }
+        if (k === 'name') { f.name = Store.uniqueName(this, U.trim(Store.str(patch.name, Store.LIMITS.name)) || f.name, U.contains(this.data.templates, f) ? 'template' : 'formula', f); }
         else if (k === 'latex') { f.latex = Store.str(patch.latex, Store.LIMITS.latex); }
         else if (k === 'category') { f.category = U.trim(Store.str(patch.category, 80)) || f.category; }
         else if (k === 'note') { f.note = Store.str(patch.note, Store.LIMITS.note); }
@@ -6643,9 +6695,9 @@ Store.Library.prototype.duplicateFormula = function (id) {
     c.favorite = false;
     return this.addFormula(c, kind);
 };
-Store.uniqueName = function (lib, name, kind) {
+Store.uniqueName = function (lib, name, kind, except) {
     var list = kind === 'template' ? lib.data.templates : lib.data.formulas, n = name, i = 2;
-    function taken(x) { return !!U.find(list, function (f) { return f.name === x; }); }
+    function taken(x) { return !!U.find(list, function (f) { return f !== except && f.name === x; }); }
     while (taken(n)) { n = name + ' ' + i; i++; }
     return n;
 };
@@ -6729,7 +6781,8 @@ Store.Library.prototype.importText = function (text, opts) {
             c = Store.cleanFormula(src[i], kind);
             if (!c) { rep.invalid.push({ name: (src[i] && src[i].name) ? Store.str(src[i].name, 60) : '#' + (i + 1), reason: 'missing or invalid source' }); continue; }
             try { self.validateLatex(c.latex); } catch (pe) { rep.invalid.push({ name: c.name, reason: 'syntax error: ' + (pe.message || pe) }); continue; }
-            dup = U.find(list, function (f) { return f.latex === c.latex && f.name === c.name; });
+            /* same source under the same name, or under the name given by an earlier import */
+            dup = U.find(list, function (f) { return f.latex === c.latex && (f.name === c.name || f.name.indexOf(c.name + ' (imported') === 0); });
             if (dup) { rep.skipped++; continue; }
             if (list.length >= max) { rep.invalid.push({ name: c.name, reason: 'library full' }); continue; }
             if (U.find(list, function (f) { return f.name === c.name; })) { c.name = Store.uniqueName(self, c.name + ' (imported)', kind); rep.renamed++; }
@@ -6970,18 +7023,20 @@ UI.listbox = function (parent, titles, widths, height, multi) {
     return lb;
 };
 UI.fillList = function (lb, rows, payloads) {
-    var i, j, it, n = Math.min(rows.length, UI.MAX_LIST);
+    var i, j, it, n = Math.min(rows.length, UI.MAX_LIST), prev = UI.selected(lb), keepId = (prev && prev.id) ? prev.id : null, reselect = null;
     lb.removeAll();
     for (i = 0; i < n; i++) {
         it = lb.add('item', String(rows[i][0]));
         for (j = 1; j < rows[i].length; j++) { if (it.subItems[j - 1]) { it.subItems[j - 1].text = String(rows[i][j]); } }
         it.payload = payloads ? payloads[i] : null;
+        if (keepId && it.payload && it.payload.id === keepId) { reselect = it; }
     }
     if (rows.length > n) {
         it = lb.add('item', '\u2026');
         if (it.subItems[0]) { it.subItems[0].text = (rows.length - n) + ' more - refine the search'; }
         it.payload = null;
     }
+    if (reselect) { try { lb.selection = reselect; } catch (e) { /* ignore */ } }
     return n;
 };
 UI.selected = function (lb) {
@@ -7013,10 +7068,11 @@ UI.showText = function (title, text) {
 UI.truncate = function (s, n) { s = String(s); return s.length > n ? s.substring(0, n - 1) + '\u2026' : s; };
 
 /* ---- application ----------------------------------------------------------------- */
-UI.launch = function () {
+UI.launch = function (opts) {
     var editing = null, rep;
+    opts = opts || {};
     try {
-        UI.lib = new Store.Library();
+        UI.lib = new Store.Library(opts.adapter || null);
         rep = UI.lib.load();
         UI.prefs = UI.lib.data.prefs;
         UI.model = new Model({ settings: UI.lib.data.settings, historyLimit: UI.prefs.historyLimit, smartOps: UI.prefs.smartOps,

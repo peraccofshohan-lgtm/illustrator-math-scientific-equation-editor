@@ -1,13 +1,17 @@
 {
- "date": "2026-11-21T16:49:50.474Z",
+ "date": "2026-11-21T16:56:49.722Z",
  "node": "v22.22.3",
- "total": 95,
- "passed": 95,
+ "total": 129,
+ "passed": 129,
  "failed": 0,
- "ms": 2170,
+ "ms": 8642,
  "suites": {
   "chemistry-tests/chemistry": {
    "passed": 8,
+   "failed": 0
+  },
+  "formatting-tests/formatting": {
+   "passed": 6,
    "failed": 0
   },
   "integration-tests/renderer": {
@@ -24,6 +28,18 @@
   },
   "persistence-tests/store": {
    "passed": 11,
+   "failed": 0
+  },
+  "physics-tests/physics": {
+   "passed": 7,
+   "failed": 0
+  },
+  "regression-tests/extreme": {
+   "passed": 8,
+   "failed": 0
+  },
+  "regression-tests/regression": {
+   "passed": 13,
    "failed": 0
   },
   "structure-tests/editor": {
@@ -75,6 +91,36 @@
   {
    "suite": "chemistry-tests/chemistry",
    "name": "exact rational arithmetic: large coefficients stay integral",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "defaults are complete and valid",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "clean() clamps numbers, normalises colours, rejects junk",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "colour parsing: hex short/long, rgb(), names; invalid rejected",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "presets merge onto defaults and stay valid",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "font detection without Illustrator reports no math font and warns",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "font detection with a mocked app.textFonts list",
    "ok": true
   },
   {
@@ -350,6 +396,146 @@
   {
    "suite": "persistence-tests/store",
    "name": "large library: 5000 formulas save and load",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "physics, unit and chemistry symbol categories are populated",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "all seven SI base units and the 22 derived units with special names",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "units render upright with a thin space, exponents raised",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "physical constants insert with correct values in templates",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "classic physics equations parse, round-trip and lay out",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "physics template categories exist with many entries",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "vector, tensor and operator notation",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "A: deep nesting - 40-level nested fractions, roots and scripts",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "B: large structures - 100x100 matrix and 20x20 determinant",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "C: long equation - 2000-term polynomial and 300-line aligned system",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "D: malformed input fuzzing - truncations and mutations never crash",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "E: Unicode - astral-plane math letters, combining marks, all symbols in one row",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "F: complex chemistry - large redox, organic combustion, ionic charges",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "G: persistence stress - hostile and huge data never executes, limits hold",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "H: undo/redo stress - 1000 random edits fully reversible, history bounded",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R1 serializer: control word followed by a letter keeps a separating space (\\langle E)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R2 serializer: class-aware symbol commands (\\bigtriangleup, colon, \\unit dot)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R3 chemistry: trailing charge signs and electrons counted correctly",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R4 ES3 build: reserved words used as keys are quoted (old ExtendScript parsers)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R5 parser: long letter runs parse in linear time (smart function scan)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R6 serializer: long rows serialise in linear time",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R7 U.toNumber: invalid input returns null (was undefined -> NaN font size)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R8 renderer: CMYK conversion receives an RGB array",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R9 store: re-importing the same file does not duplicate renamed items",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R10 parser: input larger than the limit is refused with a clear message",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R11 serializer plain-text quirks are stable (documented limitations)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R12 nested superscripts: layout and plain text are not exponential in depth",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R13 node limit admits the largest matrix the builder can create (100 x 100)",
    "ok": true
   },
   {
