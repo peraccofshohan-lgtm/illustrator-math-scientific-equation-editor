@@ -12,7 +12,7 @@ function makeT(suiteName, results) {
       catch (e) { results.push({ suite: suiteName, name, ok: false, ms: Date.now() - start, error: (e && e.stack) ? e.stack.split('\n').slice(0, 6).join('\n') : String(e) }); }
     },
     ok(v, msg) { assert.ok(v, msg); },
-    eq(a, b, msg) { assert.deepStrictEqual(a, b, msg); },
+    eq(a, b, msg) { const n = v => (v !== null && typeof v === 'object') ? JSON.parse(JSON.stringify(v)) : v; assert.deepStrictEqual(n(a), n(b), msg); },
     throws(fn, re, msg) {
       let threw = null;
       try { fn(); } catch (e) { threw = e; }

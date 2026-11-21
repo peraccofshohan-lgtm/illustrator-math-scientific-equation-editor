@@ -116,7 +116,7 @@ Renderer.layerHidden = function (layer) {
 Renderer.makeColor = function (doc, hex) {
     var rgb = U.hexToRgb(hex || '#000000'), c, cmyk;
     if (doc.documentColorSpace === DocumentColorSpace.CMYK) {
-        cmyk = U.rgbToCmyk(rgb[0], rgb[1], rgb[2]);
+        cmyk = U.rgbToCmyk(rgb);
         c = new CMYKColor();
         c.cyan = cmyk[0]; c.magenta = cmyk[1]; c.yellow = cmyk[2]; c.black = cmyk[3];
         return c;
@@ -171,8 +171,18 @@ Renderer.IllustratorMetrics = function (container, plan) {
 };
 
 /* ---- Payload stored on the inserted group (for re-editing) ------------------------- */
-Renderer.encodeNote = function (latex, settings, mode) {
-    return MSEE.NOTE_PREFIX + JSONX.stringify({ app: 'MSEE', v: 1, version: MSEE.VERSION, latex: latex, settings: settings, mode: mode });
+Renderer.encodeNote = function (latex, settings, mode, offset) {
+    var data = { app: 'MSEE', v: 1, version: MSEE.VERSION, latex: latex, settings: settings, mode: mode };
+    if (offset) { data.offset = [U.round(offset[0], 3), U.round(offset[1], 3)]; }
+    return MSEE.NOTE_PREFIX + JSONX.stringify(data);
+};
+/* Offset from the item's geometric top-left to the equation's baseline origin;
+   lets "Update" keep the baseline where it was even after the user moved it. */
+Renderer.originOffset = function (item, origin) {
+    var gb;
+    try { gb = item.geometricBounds; } catch (e) { return null; }
+    if (!gb || !isFinite(gb[0]) || !isFinite(gb[1])) { return null; }
+    return [origin[0] - gb[0], origin[1] - gb[1]];
 };
 Renderer.decodeNote = function (note) {
     var data;
@@ -180,7 +190,8 @@ Renderer.decodeNote = function (note) {
     try { data = JSONX.parse(note.substring(MSEE.NOTE_PREFIX.length)); } catch (e) { return null; }
     if (!data || typeof data !== 'object' || typeof data.latex !== 'string') { return null; }
     if (data.latex.length > 200000) { return null; }
-    return { latex: data.latex, settings: Formatting.clean(data.settings), mode: U.contains(Renderer.MODES, data.mode) ? data.mode : 'group', version: String(data.version || '') };
+    return { latex: data.latex, settings: Formatting.clean(data.settings), mode: U.contains(Renderer.MODES, data.mode) ? data.mode : 'group', version: String(data.version || ''),
+        offset: (U.isArray(data.offset) && data.offset.length === 2 && U.isNumber(data.offset[0]) && U.isNumber(data.offset[1]) && isFinite(data.offset[0]) && isFinite(data.offset[1])) ? data.offset : null };
 };
 /* Look for an equation in the current selection (the group itself or any item inside it). */
 Renderer.findSelectedEquation = function () {
@@ -267,7 +278,10 @@ Renderer.placement = function (doc, layout, opts) {
     var w = layout.width, c, ab, r, gb;
     if (opts.replaceItem) {
         try {
+            if (opts.replaceItem.typename === 'TextFrame' && opts.replaceItem.anchor) { return [opts.replaceItem.anchor[0], opts.replaceItem.anchor[1]]; }
             gb = opts.replaceItem.geometricBounds;   /* [left, top, right, bottom] */
+            r = Renderer.decodeNote(opts.replaceItem.note);
+            if (r && r.offset) { return [gb[0] + r.offset[0], gb[1] + r.offset[1]]; }
             return [gb[0] - Layout.bounds(layout).left, gb[1] - Layout.bounds(layout).top];
         } catch (e) { /* fall through */ }
     }
@@ -328,7 +342,7 @@ Renderer.insert = function (root, settings, opts) {
             }
         }
         if (mode === 'outlines') { Renderer.outlineText(group); }
-        group.note = Renderer.encodeNote(opts.latex || Serializer.toLatex(root), settings, mode);
+        group.note = Renderer.encodeNote(opts.latex || Serializer.toLatex(root), settings, mode, Renderer.originOffset(group, origin));
         if (mode === 'components') { item = Renderer.ungroup(group, layer); warnings.push('Separate components cannot be re-edited as one equation.'); }
         else { item = group; }
         if (mode === 'single') { item = Renderer.unwrapSingle(group, layer, opts.latex || Serializer.toLatex(root), settings); }

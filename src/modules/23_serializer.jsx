@@ -105,14 +105,16 @@ Serializer.group = function (row) {
 /* Concatenate two LaTeX fragments, inserting a space only when needed so that
    re-lexing yields the same tokens (e.g. "\\langle" + "E"). */
 Serializer.join = function (a, b) {
+    var ta;
     if (a === '' || b === '') { return a + b; }
-    if (/\\[A-Za-z]+\*?$/.test(a) && /^[A-Za-z]/.test(b)) { return a + ' ' + b; }
-    if (/\\$/.test(a) && !/\\\\$/.test(a)) { return a + ' ' + b; }
+    ta = Serializer.tail(a);
+    if (/\\[A-Za-z]+\*?$/.test(ta) && /^[A-Za-z]/.test(b)) { return a + ' ' + b; }
+    if (/\\$/.test(ta) && !/\\\\$/.test(ta)) { return a + ' ' + b; }
     return a + b;
 };
 /* Join row pieces, inserting spaces only where re-lexing would change meaning. */
 Serializer.rowContent = function (row) {
-    var pieces = [], i, out = '', p, prev, needSpace, breaks = {};
+    var pieces = [], i, out = '', p, prev, needSpace, breaks = {}, last = '';
     for (i = 0; i < row.items.length; i++) { pieces.push(Serializer.node(row.items[i])); }
     Serializer.markFunctionBreaks(pieces, breaks);
     for (i = 0; i < pieces.length; i++) {
@@ -120,7 +122,8 @@ Serializer.rowContent = function (row) {
         if (p === '') { continue; }
         needSpace = false;
         if (out !== '') {
-            prev = out;
+            /* only the tail of the previous piece matters; testing the whole output would be quadratic */
+            prev = Serializer.tail(last);
             if (/\\[A-Za-z]+\*?$/.test(prev) && /^[A-Za-z]/.test(p)) { needSpace = true; }
             else if (/[0-9.]$/.test(prev) && /^[0-9.]/.test(p)) { needSpace = true; }
             else if (/[<>\-+=!~.]$/.test(prev) && /^[<>\-+=!~.]/.test(p)) { needSpace = true; }
@@ -128,9 +131,11 @@ Serializer.rowContent = function (row) {
             else if (breaks[i]) { needSpace = true; }
         }
         out += (needSpace ? ' ' : '') + p;
+        last = p;
     }
     return out;
 };
+Serializer.tail = function (s) { return s.length > 80 ? s.substring(s.length - 80) : s; };
 /* Runs of bare letters that would be re-read as a function name (s i n -> sin)
    are split with a space. Only suffixes matter because the parser scans a run
    from each letter to the end of the run. */

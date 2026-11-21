@@ -27,8 +27,14 @@ function Parser(src, opts) {
 }
 Parser.MAX_DEPTH = 150;
 
+Parser.MAX_INPUT = 100000;
 Parser.parse = function (src, opts) {
-    var p = new Parser(src, opts);
+    var p;
+    src = (src === null || src === undefined) ? '' : String(src);
+    if (src.length > Parser.MAX_INPUT) {
+        throw new MathError(ErrorKind.PARSER, 'The input is too long (' + src.length + ' characters; the limit is ' + Parser.MAX_INPUT + ').', '', Parser.MAX_INPUT);
+    }
+    p = new Parser(src, opts);
     var root = p.parseTop();
     return { root: root, warnings: p.warnings };
 };
@@ -344,7 +350,9 @@ Parser.prototype.parsePrimary = function (stop) {
     if (MathData.isLatinLetter(ch)) {
         if (this.opts.smartFuncs && !stop.single) {
             run = ch; j = 1;
-            while (true) {
+            if (!Parser.MAX_FUNC_LEN) { for (k = 0; k < MathData.BARE_FUNCS.length; k++) { Parser.MAX_FUNC_LEN = Math.max(Parser.MAX_FUNC_LEN || 0, MathData.BARE_FUNCS[k].length); } }
+            /* only scan as far as the longest function name (+1 to detect longer words): keeps parsing linear */
+            while (j <= Parser.MAX_FUNC_LEN) {
                 t2 = this.peek(j);
                 if (t2.t === 'char' && !t2.sp && MathData.isLatinLetter(t2.v)) { run += t2.v; j++; } else { break; }
             }
