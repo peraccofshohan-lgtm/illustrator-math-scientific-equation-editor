@@ -36,9 +36,9 @@ jobs:
           tag="$GITHUB_REF_NAME"
           notes="release/notes/$tag.md"
           test -f "$notes" || { echo "Missing $notes"; exit 1; }
-          title="Adobe Illustrator Advanced Mathematical & Scientific Equation Editor $tag"
+          title="Adobe Illustrator Advanced Mathematical & Scientific Equation Editor"
           flags=""
-          case "$tag" in *-*) flags="--prerelease" ;; esac
+          case "$tag" in *-*) flags="--prerelease"; title="$title $tag (pre-release)" ;; esac
           gh release create "$tag" release/Shohan_Khan_Illustrator_Math_Scientific_Equation_Editor.jsx \
             --title "$title" --notes-file "$notes" --verify-tag $flags
       - name: Verify uploaded asset
