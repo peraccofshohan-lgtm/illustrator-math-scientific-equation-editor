@@ -35,6 +35,31 @@ Serializer.charLatex = function (ch) {
     if (U.has(MathData.CHAR_TO_CMD, ch)) { return '\\' + MathData.CHAR_TO_CMD[ch]; }
     return ch;
 };
+Serializer.CMD_BY_CHAR_CLASS = {};
+(function () {
+    var k, e;
+    for (k in MathData.CMD) {
+        if (U.has(MathData.CMD, k)) {
+            e = MathData.CMD[k];
+            if (!U.has(Serializer.CMD_BY_CHAR_CLASS, e[0] + '|' + e[1])) { Serializer.CMD_BY_CHAR_CLASS[e[0] + '|' + e[1]] = k; }
+        }
+    }
+}());
+/* Command for a character with a given atom class, so that re-parsing restores the class. */
+Serializer.ASCII_BY_CHAR_CLASS = {};
+(function () {
+    var k;
+    for (k in MathData.ASCII_OPS) {
+        if (U.has(MathData.ASCII_OPS, k) && k !== '"') { Serializer.ASCII_BY_CHAR_CLASS[MathData.ASCII_OPS[k][0] + '|' + MathData.ASCII_OPS[k][1]] = k; }
+    }
+}());
+Serializer.symbolLatex = function (ch, cls) {
+    var pref = MathData.CHAR_TO_CMD[ch], key = ch + '|' + cls;
+    if (U.has(Serializer.ASCII_BY_CHAR_CLASS, key)) { return Serializer.ASCII_BY_CHAR_CLASS[key]; }
+    if (pref && MathData.CMD[pref] && MathData.CMD[pref][1] === cls) { return '\\' + pref; }
+    if (U.has(Serializer.CMD_BY_CHAR_CLASS, key) && !U.has(MathData.ASCII_OPS, ch)) { return '\\' + Serializer.CMD_BY_CHAR_CLASS[key]; }
+    return Serializer.charLatex(ch);
+};
 Serializer.delimLatex = function (d) {
     return U.has(MathData.DELIM_TO_LATEX, d) ? MathData.DELIM_TO_LATEX[d] : Serializer.charLatex(d);
 };
@@ -77,6 +102,14 @@ Serializer.group = function (row) {
     return '{' + Serializer.rowContent(row) + '}';
 };
 
+/* Concatenate two LaTeX fragments, inserting a space only when needed so that
+   re-lexing yields the same tokens (e.g. "\\langle" + "E"). */
+Serializer.join = function (a, b) {
+    if (a === '' || b === '') { return a + b; }
+    if (/\\[A-Za-z]+\*?$/.test(a) && /^[A-Za-z]/.test(b)) { return a + ' ' + b; }
+    if (/\\$/.test(a) && !/\\\\$/.test(a)) { return a + ' ' + b; }
+    return a + b;
+};
 /* Join row pieces, inserting spaces only where re-lexing would change meaning. */
 Serializer.rowContent = function (row) {
     var pieces = [], i, out = '', p, prev, needSpace, breaks = {};
@@ -182,7 +215,7 @@ Serializer.nodeInner = function (n) {
     case 'variable':
         return Serializer.charLatex(n.text);
     case 'operator': case 'symbol':
-        return Serializer.charLatex(n.text);
+        return Serializer.symbolLatex(n.text, n.cls);
     case 'func':
         if (n.custom || !U.has(MathData.FUNCS, n.name)) { s = '\\operatorname' + (n.limits ? '*' : '') + '{' + n.name + '}'; }
         else {
@@ -224,7 +257,7 @@ Serializer.nodeInner = function (n) {
         return s;
     case 'fenced':
         if (!n.explicit && MathData.AUTO_PAIRS[n.left] === n.right) {
-            return Serializer.delimLatex(n.left) + (n.left === '{' ? ' ' : '') + Serializer.rowContent(n.body) + (n.left === '{' ? ' ' : '') + Serializer.delimLatex(n.right);
+            return Serializer.join(Serializer.join(Serializer.delimLatex(n.left), Serializer.rowContent(n.body)), Serializer.delimLatex(n.right));
         }
         return '\\left' + Serializer.delimLatex(n.left) + ' ' + Serializer.rowContent(n.body) + ' \\right' + Serializer.delimLatex(n.right);
     case 'matrix':

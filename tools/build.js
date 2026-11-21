@@ -18,6 +18,10 @@ const OUT = path.join(ROOT, 'release', OUT_NAME);
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
 function build() {
+  // Regenerate data-driven modules first so the release always matches src/data.
+  const gen = require('./gen-templates.js');
+  const genText = gen.generate();
+  if (!fs.existsSync(gen.OUT) || fs.readFileSync(gen.OUT, 'utf8') !== genText) { fs.writeFileSync(gen.OUT, genText); }
   const files = fs.readdirSync(SRC).filter((f) => /^\d\d_.*\.jsx$/.test(f)).sort();
   if (!files.length || files[0] !== '00_header.jsx' || files[files.length - 1] !== '99_footer.jsx') {
     throw new Error('Module set must start with 00_header.jsx and end with 99_footer.jsx');
