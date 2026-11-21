@@ -1,0 +1,751 @@
+{
+ "date": "2026-11-21T17:05:41.631Z",
+ "node": "v22.22.3",
+ "total": 138,
+ "passed": 138,
+ "failed": 0,
+ "ms": 9627,
+ "suites": {
+  "chemistry-tests/chemistry": {
+   "passed": 8,
+   "failed": 0
+  },
+  "formatting-tests/formatting": {
+   "passed": 6,
+   "failed": 0
+  },
+  "integration-tests/es3-runtime": {
+   "passed": 7,
+   "failed": 0
+  },
+  "integration-tests/renderer": {
+   "passed": 17,
+   "failed": 0
+  },
+  "layout-tests/layout": {
+   "passed": 14,
+   "failed": 0
+  },
+  "parser-tests/parser": {
+   "passed": 14,
+   "failed": 0
+  },
+  "persistence-tests/store": {
+   "passed": 11,
+   "failed": 0
+  },
+  "physics-tests/physics": {
+   "passed": 7,
+   "failed": 0
+  },
+  "regression-tests/extreme": {
+   "passed": 8,
+   "failed": 0
+  },
+  "regression-tests/regression": {
+   "passed": 13,
+   "failed": 0
+  },
+  "structure-tests/editor": {
+   "passed": 12,
+   "failed": 0
+  },
+  "ui-tests/ui": {
+   "passed": 21,
+   "failed": 0
+  }
+ },
+ "failures": [],
+ "tests": [
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "118 elements with consistent data",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "balances molecular reactions",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "balances ionic / redox equations with charge conservation",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "states, hydrates and conditions are preserved",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "impossible, ambiguous and malformed reactions are rejected with explanations",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "molar mass with nested groups and hydrates",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "\\ce notation renders upright formulas with subscripts, charges and arrows",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "exact rational arithmetic: large coefficients stay integral",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "defaults are complete and valid",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "clean() clamps numbers, normalises colours, rejects junk",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "colour parsing: hex short/long, rgb(), names; invalid rejected",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "presets merge onto defaults and stay valid",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "font detection without Illustrator reports no math font and warns",
+   "ok": true
+  },
+  {
+   "suite": "formatting-tests/formatting",
+   "name": "font detection with a mocked app.textFonts list",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "script loads with ES5 built-ins removed",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: every template parses, serialises, round-trips and lays out",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: every symbol snippet parses and lays out",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: chemistry balancing and molar mass",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: JSONX, store save/load/import/export",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: model editing, undo/redo and all editor operations",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: full UI launch, preview drawing and insertion into the mock document",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "editable group: named group with text frames, rule, note",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "numerator is above denominator and the bar lies between them (y up)",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "radicals, delimiters and big operators produce vector paths",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "separate components mode leaves ungrouped items on the layer",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "single text mode for plain-compatible input, refused otherwise",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "outlines mode converts text frames, keeps note for re-edit",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "no document / locked layer / hidden layer are refused before creating anything",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "locked parent layer is detected",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "failure mid-insertion rolls back every created object",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "replace: new version takes the old position, old one removed; failure restores it",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "findSelectedEquation walks from a selected child to the group note",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "notes are data only: malformed or hostile notes are rejected without execution",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "CMYK documents receive CMYK colors; RGB documents RGB",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "placement: view centre and artboard centre",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "missing fonts fall back with a warning instead of failing",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "every template inserts into the mock document without error",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "insertion works in document coordinates and restores the user setting",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "every template lays out with finite geometry and positive size",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "every symbol lays out with finite geometry",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "fraction is taller than its parts and centred on the math axis",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "superscript raised, subscript lowered, both smaller",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "display style enlarges big operators and limits go above/below",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "radical covers its radicand; delimiters stretch with content",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "matrix cell spacing setting widens the matrix",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "font size scales geometry linearly",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "fraction bar thickness and script scale settings are honoured",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "colour settings reach the primitives",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "hit testing returns the smallest region containing the point",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "placeholders are drawn for empty slots only when requested",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "bounds include all ink",
+   "ok": true
+  },
+  {
+   "suite": "layout-tests/layout",
+   "name": "preview renderer draws every template with finite coordinates",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "fractions, roots and scripts build the expected structure",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "big operators, limits, integrals",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "matrices and determinants of every environment",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "piecewise, aligned and multiline",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "delimiters: \\left/\\right, auto-fence, invisible, middle",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "Greek, operators, accents, fonts, text, colour",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "physics notation: derivatives, bra-ket, units, scientific notation",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "smart input: ASCII operators and bare function names",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "errors carry kind, message and position",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "input limits: oversize and pathological nesting are rejected cleanly",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "all 383 templates parse, round-trip and validate",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "every symbol insertion snippet parses and round-trips",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "serializer output is canonical and idempotent",
+   "ok": true
+  },
+  {
+   "suite": "parser-tests/parser",
+   "name": "plain-text and single-text conversion",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "default adapter uses the user data folder",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "CRUD: add, update, rename, duplicate, favorite, delete, search",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "recents and favorite symbols are bounded and de-duplicated",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "file adapter: save, reload, backup and .tmp cleanup",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "corrupt main file: recovers from backup and keeps a copy of the damaged file",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "save never overwrites the backup with an unreadable main file",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "write failure is reported and does not corrupt existing data",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "export/import round-trip with duplicate skipping and renaming",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "import rejects wrong format, invalid entries and never executes content",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "JSONX: strict parser rejects JavaScript, accepts JSON, round-trips unicode",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "large library: 5000 formulas save and load",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "physics, unit and chemistry symbol categories are populated",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "all seven SI base units and the 22 derived units with special names",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "units render upright with a thin space, exponents raised",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "physical constants insert with correct values in templates",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "classic physics equations parse, round-trip and lay out",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "physics template categories exist with many entries",
+   "ok": true
+  },
+  {
+   "suite": "physics-tests/physics",
+   "name": "vector, tensor and operator notation",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "A: deep nesting - 40-level nested fractions, roots and scripts",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "B: large structures - 100x100 matrix and 20x20 determinant",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "C: long equation - 2000-term polynomial and 300-line aligned system",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "D: malformed input fuzzing - truncations and mutations never crash",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "E: Unicode - astral-plane math letters, combining marks, all symbols in one row",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "F: complex chemistry - large redox, organic combustion, ionic charges",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "G: persistence stress - hostile and huge data never executes, limits hold",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/extreme",
+   "name": "H: undo/redo stress - 1000 random edits fully reversible, history bounded",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R1 serializer: control word followed by a letter keeps a separating space (\\langle E)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R2 serializer: class-aware symbol commands (\\bigtriangleup, colon, \\unit dot)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R3 chemistry: trailing charge signs and electrons counted correctly",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R4 ES3 build: reserved words used as keys are quoted (old ExtendScript parsers)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R5 parser: long letter runs parse in linear time (smart function scan)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R6 serializer: long rows serialise in linear time",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R7 U.toNumber: invalid input returns null (was undefined -> NaN font size)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R8 renderer: CMYK conversion receives an RGB array",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R9 store: re-importing the same file does not duplicate renamed items",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R10 parser: input larger than the limit is refused with a clear message",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R11 serializer plain-text quirks are stable (documented limitations)",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R12 nested superscripts: layout and plain text are not exponential in depth",
+   "ok": true
+  },
+  {
+   "suite": "regression-tests/regression",
+   "name": "R13 node limit admits the largest matrix the builder can create (100 x 100)",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "insert into empty slots fills the slot then appends after",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "wrap, unwrap-by-delete, duplicate, move",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "toggle optional slots on scripts, roots and big operators",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "matrix row/column operations and environment change",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "multiline add/delete line and tag",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "setContent replaces an element; invalid syntax leaves the model untouched",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "per-element style set/clear round-trips through syntax",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "undo/redo restores content, selection and settings; redo cleared by new edit",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "history is bounded by its limit",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "no-op edits are not recorded in history",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "semantic validation reports empty slots and the analyzer classifies rows",
+   "ok": true
+  },
+  {
+   "suite": "structure-tests/editor",
+   "name": "structure helpers: describe, count, depth, find, clone, equal",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "dialog builds with title, attribution and all 11 tabs",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "no decorative buttons: every button has a handler and a tooltip",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "direct input -> model -> preview drawn with finite coordinates",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "direct input syntax error shows line, column and caret",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "symbol browser search, insert, favorite and recent",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "equation builder inserts every structure button without error",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "matrix size validation rejects 0 and 101",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "selection: preview click selects, element ops, wrap, delete, undo/redo",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "selected element content edit and per-element formatting",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "chemistry balance, molar mass and element lookup",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "templates: browse, search, use, insert, custom template save/delete",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "formula library: save, rename, duplicate, favorite, delete, persistence",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "formatting tab applies valid values and rejects invalid ones",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "insert into the mock document and re-edit workflow",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "insert without a document reports a clear error",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "keyboard shortcuts: Ctrl+Z / Ctrl+Y outside text fields, Ctrl+Enter inserts",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "global search finds symbols, templates and formulas",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "corrupt library file: UI still starts and reports recovery",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "settings: history size validation, preferences persist on close",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "help text documents syntax, shortcuts and re-editing",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "home quick-start buttons switch tabs using tab objects",
+   "ok": true
+  }
+ ]
+}

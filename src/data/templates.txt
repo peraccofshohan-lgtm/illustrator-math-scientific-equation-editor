@@ -1,0 +1,421 @@
+# Template library source. One template per line:  Name :: LaTeX :: keywords :: description (optional)
+# Section header:  ## Group / Category
+# The build (tools/build.js) converts this file into src/modules/35_templates.jsx.
+# Every template is parsed by the automated tests; a template that does not parse fails the build tests.
+
+## Mathematics / Algebra
+Quadratic formula :: x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} :: roots quadratic equation :: Roots of ax^2 + bx + c = 0
+Quadratic equation :: ax^2 + bx + c = 0 :: polynomial second degree
+Discriminant :: \Delta = b^2 - 4ac :: quadratic delta
+Vieta's formulas (quadratic) :: x_1 + x_2 = -\frac{b}{a}, \quad x_1 x_2 = \frac{c}{a} :: roots sum product
+Difference of squares :: a^2 - b^2 = (a + b)(a - b) :: factoring identity
+Square of a sum :: (a + b)^2 = a^2 + 2ab + b^2 :: binomial expansion identity
+Square of a difference :: (a - b)^2 = a^2 - 2ab + b^2 :: binomial identity
+Cube of a sum :: (a + b)^3 = a^3 + 3a^2 b + 3ab^2 + b^3 :: binomial identity
+Sum of cubes :: a^3 + b^3 = (a + b)(a^2 - ab + b^2) :: factoring
+Difference of cubes :: a^3 - b^3 = (a - b)(a^2 + ab + b^2) :: factoring
+Binomial theorem :: (x + y)^n = \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^{k} :: expansion combinatorics
+Binomial coefficient :: \binom{n}{k} = \frac{n!}{k!\,(n-k)!} :: choose combinations
+Exponent product rule :: a^m \cdot a^n = a^{m+n} :: powers laws
+Exponent quotient rule :: \frac{a^m}{a^n} = a^{m-n} :: powers laws
+Power of a power :: (a^m)^n = a^{mn} :: exponents
+Negative exponent :: a^{-n} = \frac{1}{a^n} :: exponents reciprocal
+Rational exponent :: a^{\frac{m}{n}} = \sqrt[n]{a^m} :: radicals roots
+Logarithm definition :: \log_b x = y \iff b^y = x :: log exponent
+Logarithm product rule :: \log_b (xy) = \log_b x + \log_b y :: log laws
+Logarithm quotient rule :: \log_b \frac{x}{y} = \log_b x - \log_b y :: log laws
+Logarithm power rule :: \log_b x^p = p \log_b x :: log laws
+Change of base :: \log_b x = \frac{\ln x}{\ln b} :: logarithm
+Arithmetic sequence :: a_n = a_1 + (n - 1)d :: progression
+Arithmetic series :: S_n = \frac{n}{2}\left(a_1 + a_n\right) :: sum progression
+Geometric sequence :: a_n = a_1 r^{n-1} :: progression ratio
+Geometric series :: S_n = a_1 \frac{1 - r^n}{1 - r} :: finite sum
+Infinite geometric series :: \sum_{n=0}^{\infty} a r^n = \frac{a}{1 - r}, \quad \left| r \right| < 1 :: convergent
+Absolute value definition :: \left| x \right| = \begin{cases} x & x \geq 0 \\ -x & x < 0 \end{cases} :: piecewise modulus
+Cubic equation :: ax^3 + bx^2 + cx + d = 0 :: polynomial third degree
+Polynomial (general) :: P(x) = \sum_{k=0}^{n} a_k x^k :: polynomial series
+Linear equation (slope-intercept) :: y = mx + b :: line slope
+Point-slope form :: y - y_1 = m(x - x_1) :: line
+Slope :: m = \frac{y_2 - y_1}{x_2 - x_1} :: gradient line
+System of linear equations :: \begin{cases} a_1 x + b_1 y = c_1 \\ a_2 x + b_2 y = c_2 \end{cases} :: simultaneous
+Inequality chain :: a < b \leq c :: relations
+Factorial :: n! = \prod_{k=1}^{n} k :: product
+Golden ratio :: \varphi = \frac{1 + \sqrt{5}}{2} :: phi
+Function composition :: (f \circ g)(x) = f\left(g(x)\right) :: composite
+
+## Mathematics / Calculus
+Derivative definition :: f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h} :: limit difference quotient
+Derivative (Leibniz) :: \frac{\mathrm{d}y}{\mathrm{d}x} :: dy dx
+Second derivative :: \frac{\mathrm{d}^{2} y}{\mathrm{d}x^{2}} :: higher order
+nth derivative :: \frac{\mathrm{d}^{n} f}{\mathrm{d}x^{n}} :: higher order
+Partial derivative :: \frac{\partial f}{\partial x} :: multivariable
+Mixed partial derivative :: \frac{\partial^{2} f}{\partial x \, \partial y} :: second order
+Power rule :: \frac{\mathrm{d}}{\mathrm{d}x} x^n = n x^{n-1} :: differentiation
+Product rule :: (fg)' = f'g + fg' :: differentiation
+Quotient rule :: \left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2} :: differentiation
+Chain rule :: \frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}y}{\mathrm{d}u} \cdot \frac{\mathrm{d}u}{\mathrm{d}x} :: composite
+Indefinite integral :: \int f(x) \, \mathrm{d}x = F(x) + C :: antiderivative
+Definite integral :: \int_{a}^{b} f(x) \, \mathrm{d}x :: area
+Fundamental theorem of calculus :: \int_{a}^{b} f(x) \, \mathrm{d}x = F(b) - F(a) :: FTC
+Integration by parts :: \int u \, \mathrm{d}v = uv - \int v \, \mathrm{d}u :: integration technique
+Substitution rule :: \int f\left(g(x)\right) g'(x) \, \mathrm{d}x = \int f(u) \, \mathrm{d}u :: u-substitution
+Gaussian integral :: \int_{-\infty}^{\infty} e^{-x^2} \, \mathrm{d}x = \sqrt{\pi} :: normal
+Double integral :: \iint_{D} f(x, y) \, \mathrm{d}A :: area multiple
+Triple integral :: \iiint_{V} f(x, y, z) \, \mathrm{d}V :: volume multiple
+Line integral :: \int_{C} \vec{F} \cdot \mathrm{d}\vec{r} :: work vector field
+Contour integral :: \oint_{C} f(z) \, \mathrm{d}z :: closed path complex
+Surface integral :: \iint_{S} \vec{F} \cdot \hat{n} \, \mathrm{d}S :: flux
+Limit :: \lim_{x \to a} f(x) = L :: limit
+Limit at infinity :: \lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^{x} = e :: euler number
+Sinc limit :: \lim_{x \to 0} \frac{\sin x}{x} = 1 :: trigonometric limit
+L'Hopital's rule :: \lim_{x \to a} \frac{f(x)}{g(x)} = \lim_{x \to a} \frac{f'(x)}{g'(x)} :: indeterminate
+One-sided limits :: \lim_{x \to a^{-}} f(x) = \lim_{x \to a^{+}} f(x) :: left right
+Taylor series :: f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!} (x - a)^n :: expansion power series
+Maclaurin series of e^x :: e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} + \cdots :: exponential series
+Maclaurin series of sin x :: \sin x = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n+1}}{(2n+1)!} :: series
+Maclaurin series of cos x :: \cos x = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n}}{(2n)!} :: series
+Geometric power series :: \frac{1}{1 - x} = \sum_{n=0}^{\infty} x^n :: series
+Gradient :: \nabla f = \left( \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z} \right) :: vector calculus
+Divergence :: \nabla \cdot \vec{F} = \frac{\partial F_x}{\partial x} + \frac{\partial F_y}{\partial y} + \frac{\partial F_z}{\partial z} :: vector calculus
+Curl :: \nabla \times \vec{F} = \begin{vmatrix} \hat{\imath} & \hat{\jmath} & \hat{k} \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ F_x & F_y & F_z \end{vmatrix} :: vector calculus rotation
+Laplacian :: \nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} + \frac{\partial^2 f}{\partial z^2} :: laplace operator
+Divergence theorem :: \iiint_{V} \nabla \cdot \vec{F} \, \mathrm{d}V = \oiint_{S} \vec{F} \cdot \mathrm{d}\vec{S} :: gauss
+Stokes' theorem :: \iint_{S} \left(\nabla \times \vec{F}\right) \cdot \mathrm{d}\vec{S} = \oint_{C} \vec{F} \cdot \mathrm{d}\vec{r} :: curl
+Green's theorem :: \oint_{C} \left(L \, \mathrm{d}x + M \, \mathrm{d}y\right) = \iint_{D} \left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right) \mathrm{d}A :: plane
+Arc length :: L = \int_{a}^{b} \sqrt{1 + \left(\frac{\mathrm{d}y}{\mathrm{d}x}\right)^2} \, \mathrm{d}x :: curve length
+Mean value theorem :: f'(c) = \frac{f(b) - f(a)}{b - a} :: MVT
+Jacobian determinant :: J = \det \begin{pmatrix} \frac{\partial x}{\partial u} & \frac{\partial x}{\partial v} \\ \frac{\partial y}{\partial u} & \frac{\partial y}{\partial v} \end{pmatrix} :: change of variables
+Riemann sum :: \int_{a}^{b} f(x) \, \mathrm{d}x = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i^{*}) \, \Delta x :: integral definition
+
+## Mathematics / Differential equations
+First-order linear ODE :: \frac{\mathrm{d}y}{\mathrm{d}x} + P(x) y = Q(x) :: ordinary differential equation
+Separable ODE :: \frac{\mathrm{d}y}{\mathrm{d}x} = g(x) h(y) :: separation of variables
+Exponential growth :: \frac{\mathrm{d}N}{\mathrm{d}t} = kN \quad \Rightarrow \quad N(t) = N_0 e^{kt} :: decay growth
+Logistic equation :: \frac{\mathrm{d}P}{\mathrm{d}t} = rP\left(1 - \frac{P}{K}\right) :: population
+Second-order linear ODE :: a y'' + b y' + c y = 0 :: homogeneous
+Characteristic equation :: a r^2 + b r + c = 0 :: ODE roots
+Damped harmonic oscillator :: m \ddot{x} + c \dot{x} + k x = 0 :: vibration
+Heat equation :: \frac{\partial u}{\partial t} = \alpha \nabla^2 u :: PDE diffusion
+Wave equation :: \frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u :: PDE
+Laplace's equation :: \nabla^2 \phi = 0 :: PDE potential
+Poisson's equation :: \nabla^2 \phi = -\frac{\rho}{\varepsilon_0} :: PDE electrostatics
+Laplace transform :: \mathcal{L}\left\{ f(t) \right\} = F(s) = \int_{0}^{\infty} f(t) e^{-st} \, \mathrm{d}t :: transform
+Fourier transform :: \hat{f}(\xi) = \int_{-\infty}^{\infty} f(x) e^{-2\pi i x \xi} \, \mathrm{d}x :: transform frequency
+Inverse Fourier transform :: f(x) = \int_{-\infty}^{\infty} \hat{f}(\xi) e^{2\pi i x \xi} \, \mathrm{d}\xi :: transform
+Fourier series :: f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left( a_n \cos nx + b_n \sin nx \right) :: periodic
+
+## Mathematics / Linear algebra
+2x2 matrix :: A = \begin{pmatrix} a & b \\ c & d \end{pmatrix} :: matrix
+3x3 matrix :: A = \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix} :: matrix
+General m x n matrix :: A = \begin{pmatrix} a_{11} & a_{12} & \cdots & a_{1n} \\ a_{21} & a_{22} & \cdots & a_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ a_{m1} & a_{m2} & \cdots & a_{mn} \end{pmatrix} :: matrix dots
+Identity matrix :: I_3 = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix} :: unit matrix
+2x2 determinant :: \det A = \begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc :: determinant
+3x3 determinant :: \begin{vmatrix} a & b & c \\ d & e & f \\ g & h & i \end{vmatrix} = a(ei - fh) - b(di - fg) + c(dh - eg) :: determinant cofactor
+Inverse of 2x2 matrix :: A^{-1} = \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix} :: inverse
+Matrix product entry :: (AB)_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj} :: multiplication
+Transpose :: \left(A^{\mathsf{T}}\right)_{ij} = A_{ji} :: transpose
+Eigenvalue equation :: A\vec{v} = \lambda \vec{v} :: eigenvector
+Characteristic polynomial :: \det\left(A - \lambda I\right) = 0 :: eigenvalues
+Column vector :: \vec{v} = \begin{pmatrix} v_1 \\ v_2 \\ v_3 \end{pmatrix} :: vector
+Dot product :: \vec{a} \cdot \vec{b} = \sum_{i=1}^{n} a_i b_i = \left\| \vec{a} \right\| \left\| \vec{b} \right\| \cos \theta :: scalar product
+Cross product :: \vec{a} \times \vec{b} = \begin{vmatrix} \hat{\imath} & \hat{\jmath} & \hat{k} \\ a_1 & a_2 & a_3 \\ b_1 & b_2 & b_3 \end{vmatrix} :: vector product
+Vector norm :: \left\| \vec{v} \right\| = \sqrt{v_1^2 + v_2^2 + \cdots + v_n^2} :: magnitude length
+Augmented matrix :: \left( \begin{array}{ccc|c} a_{11} & a_{12} & a_{13} & b_1 \\ a_{21} & a_{22} & a_{23} & b_2 \\ a_{31} & a_{32} & a_{33} & b_3 \end{array} \right) :: gauss elimination system
+Linear system (matrix form) :: A\vec{x} = \vec{b} :: system
+Cramer's rule :: x_i = \frac{\det A_i}{\det A} :: system determinant
+Trace :: \operatorname{tr} A = \sum_{i=1}^{n} a_{ii} :: diagonal sum
+Orthogonal matrix :: Q^{\mathsf{T}} Q = Q Q^{\mathsf{T}} = I :: rotation
+Rotation matrix (2D) :: R(\theta) = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix} :: rotation
+
+## Mathematics / Trigonometry
+Pythagorean identity :: \sin^2 \theta + \cos^2 \theta = 1 :: trig identity
+Tangent definition :: \tan \theta = \frac{\sin \theta}{\cos \theta} :: trig
+Secant identity :: 1 + \tan^2 \theta = \sec^2 \theta :: trig identity
+Sine of sum :: \sin(\alpha \pm \beta) = \sin\alpha \cos\beta \pm \cos\alpha \sin\beta :: addition formula
+Cosine of sum :: \cos(\alpha \pm \beta) = \cos\alpha \cos\beta \mp \sin\alpha \sin\beta :: addition formula
+Tangent of sum :: \tan(\alpha \pm \beta) = \frac{\tan\alpha \pm \tan\beta}{1 \mp \tan\alpha \tan\beta} :: addition formula
+Double angle (sine) :: \sin 2\theta = 2 \sin\theta \cos\theta :: double angle
+Double angle (cosine) :: \cos 2\theta = \cos^2\theta - \sin^2\theta = 1 - 2\sin^2\theta :: double angle
+Half angle (sine) :: \sin \frac{\theta}{2} = \pm \sqrt{\frac{1 - \cos\theta}{2}} :: half angle
+Law of sines :: \frac{a}{\sin A} = \frac{b}{\sin B} = \frac{c}{\sin C} = 2R :: triangle
+Law of cosines :: c^2 = a^2 + b^2 - 2ab \cos C :: triangle
+Euler's formula :: e^{i\theta} = \cos\theta + i \sin\theta :: complex exponential
+Euler's identity :: e^{i\pi} + 1 = 0 :: famous
+De Moivre's formula :: \left(\cos\theta + i\sin\theta\right)^n = \cos n\theta + i \sin n\theta :: complex power
+Product to sum :: \sin\alpha \sin\beta = \frac{1}{2}\left[\cos(\alpha - \beta) - \cos(\alpha + \beta)\right] :: trig identity
+Hyperbolic sine :: \sinh x = \frac{e^x - e^{-x}}{2} :: hyperbolic
+Hyperbolic cosine :: \cosh x = \frac{e^x + e^{-x}}{2} :: hyperbolic
+Hyperbolic identity :: \cosh^2 x - \sinh^2 x = 1 :: hyperbolic
+
+## Mathematics / Geometry
+Pythagorean theorem :: a^2 + b^2 = c^2 :: right triangle
+Distance formula :: d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} :: distance
+Midpoint formula :: M = \left( \frac{x_1 + x_2}{2}, \frac{y_1 + y_2}{2} \right) :: midpoint
+Circle equation :: (x - h)^2 + (y - k)^2 = r^2 :: circle
+Ellipse equation :: \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1 :: conic
+Hyperbola equation :: \frac{x^2}{a^2} - \frac{y^2}{b^2} = 1 :: conic
+Parabola :: y^2 = 4px :: conic
+Area of a circle :: A = \pi r^2 :: area
+Circumference :: C = 2\pi r :: perimeter
+Area of a triangle :: A = \frac{1}{2} b h :: area
+Heron's formula :: A = \sqrt{s(s - a)(s - b)(s - c)}, \quad s = \frac{a + b + c}{2} :: triangle area
+Area of a trapezoid :: A = \frac{a + b}{2} h :: area
+Volume of a sphere :: V = \frac{4}{3} \pi r^3 :: volume
+Surface area of a sphere :: A = 4\pi r^2 :: area
+Volume of a cylinder :: V = \pi r^2 h :: volume
+Volume of a cone :: V = \frac{1}{3} \pi r^2 h :: volume
+Angle sum of a polygon :: S = (n - 2) \cdot 180^{\circ} :: polygon angles
+Arc length (circle) :: s = r\theta :: arc radian
+Sector area :: A = \frac{1}{2} r^2 \theta :: sector
+Angle notation :: \angle ABC = 90^{\circ} :: angle degree
+Similar triangles :: \triangle ABC \sim \triangle DEF :: similarity
+Parallel and perpendicular :: AB \parallel CD, \quad AB \perp EF :: lines
+
+## Mathematics / Statistics and probability
+Mean :: \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i :: average
+Variance (population) :: \sigma^2 = \frac{1}{N} \sum_{i=1}^{N} \left(x_i - \mu\right)^2 :: spread
+Sample variance :: s^2 = \frac{1}{n - 1} \sum_{i=1}^{n} \left(x_i - \bar{x}\right)^2 :: spread
+Standard deviation :: \sigma = \sqrt{\frac{1}{N} \sum_{i=1}^{N} \left(x_i - \mu\right)^2} :: spread
+Z-score :: z = \frac{x - \mu}{\sigma} :: standard score
+Normal distribution :: f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}} :: gaussian pdf
+Binomial distribution :: P(X = k) = \binom{n}{k} p^k (1 - p)^{n-k} :: discrete
+Poisson distribution :: P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!} :: discrete
+Exponential distribution :: f(x) = \lambda e^{-\lambda x}, \quad x \geq 0 :: continuous
+Expected value :: E[X] = \sum_{i} x_i \, P(x_i) :: expectation mean
+Expected value (continuous) :: E[X] = \int_{-\infty}^{\infty} x f(x) \, \mathrm{d}x :: expectation
+Variance identity :: \operatorname{Var}(X) = E\left[X^2\right] - \left(E[X]\right)^2 :: variance
+Covariance :: \operatorname{Cov}(X, Y) = E\left[(X - \mu_X)(Y - \mu_Y)\right] :: covariance
+Correlation coefficient :: r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}} :: pearson
+Bayes' theorem :: P(A \mid B) = \frac{P(B \mid A) \, P(A)}{P(B)} :: conditional probability
+Conditional probability :: P(A \mid B) = \frac{P(A \cap B)}{P(B)} :: probability
+Addition rule :: P(A \cup B) = P(A) + P(B) - P(A \cap B) :: probability union
+Permutations :: P(n, r) = \frac{n!}{(n - r)!} :: arrangements
+Combinations :: C(n, r) = \binom{n}{r} = \frac{n!}{r!\,(n - r)!} :: selections
+Linear regression :: \hat{y} = \beta_0 + \beta_1 x :: least squares
+Confidence interval :: \bar{x} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} :: estimate
+Chi-square statistic :: \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} :: test
+
+## Mathematics / Sets, logic and number theory
+Set builder notation :: A = \left\{ x \in \mathbb{R} \mid x > 0 \right\} :: set
+Union and intersection :: A \cup B, \quad A \cap B :: sets
+De Morgan's law (sets) :: \overline{A \cup B} = \bar{A} \cap \bar{B} :: complement
+Number sets :: \mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R} \subset \mathbb{C} :: natural integer rational real complex
+For all / exists :: \forall \varepsilon > 0 \; \exists \delta > 0 :: quantifiers epsilon delta
+Implication :: p \Rightarrow q \equiv \neg p \lor q :: logic
+De Morgan's law (logic) :: \neg (p \land q) \iff \neg p \lor \neg q :: logic
+Modular congruence :: a \equiv b \pmod{n} :: congruence modulo
+Fermat's little theorem :: a^{p-1} \equiv 1 \pmod{p} :: number theory prime
+Euler's totient :: \varphi(n) = n \prod_{p \mid n} \left(1 - \frac{1}{p}\right) :: phi function
+Greatest common divisor :: \gcd(a, b) \cdot \operatorname{lcm}(a, b) = \left| ab \right| :: gcd lcm
+Floor and ceiling :: \left\lfloor x \right\rfloor \leq x \leq \left\lceil x \right\rceil :: rounding
+Sum of first n integers :: \sum_{k=1}^{n} k = \frac{n(n + 1)}{2} :: gauss sum
+Sum of squares :: \sum_{k=1}^{n} k^2 = \frac{n(n + 1)(2n + 1)}{6} :: series
+Basel problem :: \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6} :: zeta
+Riemann zeta function :: \zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s} :: zeta
+Harmonic series :: H_n = \sum_{k=1}^{n} \frac{1}{k} :: harmonic
+
+## Mathematics / Complex numbers
+Complex number :: z = a + bi :: rectangular form
+Modulus :: \left| z \right| = \sqrt{a^2 + b^2} :: absolute value
+Complex conjugate :: \bar{z} = a - bi :: conjugate
+Polar form :: z = r\left(\cos\theta + i\sin\theta\right) = r e^{i\theta} :: polar
+Imaginary unit :: i^2 = -1 :: imaginary
+Cauchy integral formula :: f(a) = \frac{1}{2\pi i} \oint_{\gamma} \frac{f(z)}{z - a} \, \mathrm{d}z :: complex analysis
+Cauchy-Riemann equations :: \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \quad \frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x} :: analytic
+Roots of unity :: z_k = e^{\frac{2\pi i k}{n}}, \quad k = 0, 1, \ldots, n - 1 :: roots
+
+## Physics / Mechanics
+Newton's second law :: \vec{F} = m\vec{a} :: force mass acceleration
+Newton's second law (momentum) :: \vec{F} = \frac{\mathrm{d}\vec{p}}{\mathrm{d}t} :: force momentum
+Momentum :: \vec{p} = m\vec{v} :: momentum
+Kinetic energy :: E_k = \frac{1}{2} m v^2 :: energy
+Potential energy (gravity) :: E_p = mgh :: energy height
+Work :: W = \vec{F} \cdot \vec{d} = F d \cos\theta :: work energy
+Work integral :: W = \int_{a}^{b} \vec{F} \cdot \mathrm{d}\vec{r} :: work
+Power :: P = \frac{\mathrm{d}W}{\mathrm{d}t} = \vec{F} \cdot \vec{v} :: power
+Velocity (kinematics) :: v = v_0 + at :: kinematics
+Displacement (kinematics) :: s = v_0 t + \frac{1}{2} a t^2 :: kinematics
+Velocity squared :: v^2 = v_0^2 + 2as :: kinematics
+Projectile range :: R = \frac{v_0^2 \sin 2\theta}{g} :: projectile
+Centripetal acceleration :: a_c = \frac{v^2}{r} = \omega^2 r :: circular motion
+Universal gravitation :: F = G \frac{m_1 m_2}{r^2} :: gravity newton
+Gravitational potential energy :: U = -\frac{G M m}{r} :: gravity
+Hooke's law :: F = -kx :: spring
+Spring potential energy :: U = \frac{1}{2} k x^2 :: spring energy
+Simple pendulum period :: T = 2\pi \sqrt{\frac{L}{g}} :: oscillation
+Mass-spring period :: T = 2\pi \sqrt{\frac{m}{k}} :: oscillation
+Simple harmonic motion :: x(t) = A \cos(\omega t + \varphi) :: oscillation
+Torque :: \vec{\tau} = \vec{r} \times \vec{F} :: rotation moment
+Angular momentum :: \vec{L} = \vec{r} \times \vec{p} = I \vec{\omega} :: rotation
+Moment of inertia :: I = \sum_{i} m_i r_i^2 :: rotation
+Rotational kinetic energy :: E_{\text{rot}} = \frac{1}{2} I \omega^2 :: rotation energy
+Kepler's third law :: T^2 = \frac{4\pi^2}{G M} a^3 :: orbit
+Escape velocity :: v_e = \sqrt{\frac{2GM}{r}} :: gravity
+Friction :: F_f = \mu F_N :: friction
+Impulse :: \vec{J} = \int \vec{F} \, \mathrm{d}t = \Delta \vec{p} :: impulse
+Lagrangian :: L = T - V :: lagrangian mechanics
+Euler-Lagrange equation :: \frac{\mathrm{d}}{\mathrm{d}t} \frac{\partial L}{\partial \dot{q}} - \frac{\partial L}{\partial q} = 0 :: lagrangian
+Hamilton's equations :: \dot{q} = \frac{\partial H}{\partial p}, \quad \dot{p} = -\frac{\partial H}{\partial q} :: hamiltonian
+Bernoulli's equation :: p + \frac{1}{2} \rho v^2 + \rho g h = \text{const} :: fluid
+Continuity equation (fluid) :: A_1 v_1 = A_2 v_2 :: fluid flow
+Pressure :: p = \frac{F}{A} :: pressure
+Hydrostatic pressure :: p = p_0 + \rho g h :: fluid
+Buoyancy :: F_b = \rho_{\text{fluid}} V g :: archimedes
+Density :: \rho = \frac{m}{V} :: density
+
+## Physics / Electromagnetism
+Coulomb's law :: F = \frac{1}{4\pi\varepsilon_0} \frac{q_1 q_2}{r^2} :: electrostatics force
+Electric field :: \vec{E} = \frac{\vec{F}}{q} :: field
+Electric field of a point charge :: \vec{E} = \frac{1}{4\pi\varepsilon_0} \frac{q}{r^2} \hat{r} :: field
+Electric potential :: V = \frac{1}{4\pi\varepsilon_0} \frac{q}{r} :: potential
+Ohm's law :: V = IR :: circuit
+Electrical power :: P = VI = I^2 R = \frac{V^2}{R} :: circuit power
+Resistors in series :: R_{\text{eq}} = R_1 + R_2 + \cdots + R_n :: circuit
+Resistors in parallel :: \frac{1}{R_{\text{eq}}} = \frac{1}{R_1} + \frac{1}{R_2} + \cdots + \frac{1}{R_n} :: circuit
+Capacitance :: C = \frac{Q}{V} :: capacitor
+Parallel-plate capacitor :: C = \frac{\varepsilon_0 \varepsilon_r A}{d} :: capacitor
+Energy in a capacitor :: U = \frac{1}{2} C V^2 :: capacitor
+RC time constant :: \tau = RC :: circuit
+Lorentz force :: \vec{F} = q\left(\vec{E} + \vec{v} \times \vec{B}\right) :: magnetism
+Magnetic force on a wire :: \vec{F} = I \vec{L} \times \vec{B} :: magnetism
+Biot-Savart law :: \mathrm{d}\vec{B} = \frac{\mu_0}{4\pi} \frac{I \, \mathrm{d}\vec{l} \times \hat{r}}{r^2} :: magnetism
+Faraday's law :: \mathcal{E} = -\frac{\mathrm{d}\Phi_B}{\mathrm{d}t} :: induction emf
+Inductor energy :: U = \frac{1}{2} L I^2 :: inductor
+Gauss's law (differential) :: \nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0} :: maxwell
+Gauss's law for magnetism :: \nabla \cdot \vec{B} = 0 :: maxwell
+Faraday's law (differential) :: \nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t} :: maxwell
+Ampere-Maxwell law :: \nabla \times \vec{B} = \mu_0 \vec{J} + \mu_0 \varepsilon_0 \frac{\partial \vec{E}}{\partial t} :: maxwell
+Maxwell's equations :: \begin{aligned} \nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\ \nabla \cdot \vec{B} &= 0 \\ \nabla \times \vec{E} &= -\frac{\partial \vec{B}}{\partial t} \\ \nabla \times \vec{B} &= \mu_0 \vec{J} + \mu_0 \varepsilon_0 \frac{\partial \vec{E}}{\partial t} \end{aligned} :: electromagnetism system
+Gauss's law (integral) :: \oint_{S} \vec{E} \cdot \mathrm{d}\vec{A} = \frac{Q_{\text{enc}}}{\varepsilon_0} :: maxwell integral
+Speed of light :: c = \frac{1}{\sqrt{\mu_0 \varepsilon_0}} :: light electromagnetic
+Poynting vector :: \vec{S} = \frac{1}{\mu_0} \vec{E} \times \vec{B} :: energy flux
+Impedance (RLC) :: Z = \sqrt{R^2 + \left(\omega L - \frac{1}{\omega C}\right)^2} :: AC circuit
+Resonant frequency :: f_0 = \frac{1}{2\pi \sqrt{LC}} :: resonance
+
+## Physics / Thermodynamics
+Ideal gas law :: pV = nRT :: gas
+First law of thermodynamics :: \Delta U = Q - W :: energy
+Entropy (Clausius) :: \mathrm{d}S = \frac{\delta Q_{\text{rev}}}{T} :: entropy
+Boltzmann entropy :: S = k_B \ln \Omega :: statistical
+Heat capacity :: Q = mc\Delta T :: specific heat
+Latent heat :: Q = mL :: phase change
+Carnot efficiency :: \eta = 1 - \frac{T_C}{T_H} :: heat engine
+Stefan-Boltzmann law :: P = \varepsilon \sigma A T^4 :: radiation
+Wien's displacement law :: \lambda_{\max} T = b :: blackbody
+Gibbs free energy :: \Delta G = \Delta H - T\Delta S :: thermodynamics chemistry
+Fourier's law of conduction :: \vec{q} = -k \nabla T :: heat flux
+Thermal expansion :: \Delta L = \alpha L_0 \Delta T :: expansion
+Average kinetic energy (gas) :: \langle E_k \rangle = \frac{3}{2} k_B T :: kinetic theory
+RMS speed :: v_{\text{rms}} = \sqrt{\frac{3 k_B T}{m}} :: kinetic theory
+Boltzmann distribution :: \frac{N_i}{N} = \frac{g_i e^{-E_i / k_B T}}{Z} :: statistical mechanics
+Partition function :: Z = \sum_{i} g_i e^{-\frac{E_i}{k_B T}} :: statistical mechanics
+
+## Physics / Waves and optics
+Wave speed :: v = f\lambda :: wave
+Wave function (traveling) :: y(x, t) = A \sin(kx - \omega t + \varphi) :: wave
+Angular frequency :: \omega = 2\pi f = \frac{2\pi}{T} :: frequency
+Wave number :: k = \frac{2\pi}{\lambda} :: wave
+Doppler effect :: f' = f \frac{v \pm v_o}{v \mp v_s} :: sound frequency
+Snell's law :: n_1 \sin\theta_1 = n_2 \sin\theta_2 :: refraction
+Refractive index :: n = \frac{c}{v} :: optics
+Thin lens equation :: \frac{1}{f} = \frac{1}{d_o} + \frac{1}{d_i} :: lens
+Magnification :: M = -\frac{d_i}{d_o} = \frac{h_i}{h_o} :: lens
+Lensmaker's equation :: \frac{1}{f} = (n - 1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right) :: lens
+Double-slit interference :: d \sin\theta = m\lambda :: interference
+Single-slit minimum :: a \sin\theta = m\lambda :: diffraction
+Bragg's law :: n\lambda = 2d \sin\theta :: diffraction crystal
+Malus's law :: I = I_0 \cos^2\theta :: polarization
+Sound intensity level :: \beta = 10 \log_{10} \frac{I}{I_0} :: decibel
+Standing wave frequencies :: f_n = \frac{n v}{2L} :: harmonics string
+
+## Physics / Modern and quantum physics
+Mass-energy equivalence :: E = mc^2 :: relativity einstein
+Relativistic energy :: E^2 = (pc)^2 + \left(m_0 c^2\right)^2 :: relativity
+Lorentz factor :: \gamma = \frac{1}{\sqrt{1 - \frac{v^2}{c^2}}} :: relativity
+Time dilation :: \Delta t' = \gamma \Delta t :: relativity
+Length contraction :: L = \frac{L_0}{\gamma} :: relativity
+Relativistic momentum :: p = \gamma m_0 v :: relativity
+Planck relation :: E = h\nu = \hbar\omega :: photon energy
+Photon momentum :: p = \frac{h}{\lambda} :: photon
+De Broglie wavelength :: \lambda = \frac{h}{p} = \frac{h}{mv} :: matter wave
+Photoelectric effect :: E_k = h\nu - \phi :: work function
+Heisenberg uncertainty :: \Delta x \, \Delta p \geq \frac{\hbar}{2} :: uncertainty principle
+Energy-time uncertainty :: \Delta E \, \Delta t \geq \frac{\hbar}{2} :: uncertainty
+Time-dependent Schrodinger equation :: i\hbar \frac{\partial}{\partial t} \Psi(\vec{r}, t) = \hat{H} \Psi(\vec{r}, t) :: quantum mechanics
+Time-independent Schrodinger equation :: -\frac{\hbar^2}{2m} \nabla^2 \psi + V \psi = E \psi :: quantum mechanics
+Hamiltonian operator :: \hat{H} = -\frac{\hbar^2}{2m} \nabla^2 + V(\vec{r}) :: quantum
+Momentum operator :: \hat{p} = -i\hbar \nabla :: quantum operator
+Canonical commutation :: \left[\hat{x}, \hat{p}\right] = i\hbar :: commutator
+Expectation value :: \langle \hat{A} \rangle = \langle \psi | \hat{A} | \psi \rangle :: bra ket dirac
+Dirac notation (inner product) :: \langle \phi | \psi \rangle = \int \phi^{*}(x) \psi(x) \, \mathrm{d}x :: bra ket
+Normalization :: \int_{-\infty}^{\infty} \left| \psi(x) \right|^2 \mathrm{d}x = 1 :: wavefunction
+Particle in a box :: E_n = \frac{n^2 \pi^2 \hbar^2}{2 m L^2} :: energy levels
+Hydrogen energy levels :: E_n = -\frac{13.6 \, \text{eV}}{n^2} :: bohr atom
+Rydberg formula :: \frac{1}{\lambda} = R_H \left(\frac{1}{n_1^2} - \frac{1}{n_2^2}\right) :: spectral lines
+Quantum harmonic oscillator :: E_n = \hbar\omega\left(n + \frac{1}{2}\right) :: energy levels
+Pauli matrices :: \sigma_x = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad \sigma_y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \quad \sigma_z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix} :: spin
+Radioactive decay :: N(t) = N_0 e^{-\lambda t} :: half-life nuclear
+Half-life :: t_{1/2} = \frac{\ln 2}{\lambda} :: decay
+Dirac equation :: \left(i\hbar \gamma^{\mu} \partial_{\mu} - mc\right) \psi = 0 :: relativistic quantum
+Einstein field equations :: G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu} :: general relativity tensor
+Minkowski metric :: \mathrm{d}s^2 = -c^2 \mathrm{d}t^2 + \mathrm{d}x^2 + \mathrm{d}y^2 + \mathrm{d}z^2 :: spacetime interval
+
+## Chemistry / Reactions
+Water formation :: \ce{2H2 + O2 -> 2H2O} :: synthesis combustion
+Methane combustion :: \ce{CH4 + 2O2 -> CO2 + 2H2O} :: combustion
+Propane combustion :: \ce{C3H8 + 5O2 -> 3CO2 + 4H2O} :: combustion
+Glucose combustion (respiration) :: \ce{C6H12O6 + 6O2 -> 6CO2 + 6H2O} :: cellular respiration
+Photosynthesis :: \ce{6CO2 + 6H2O ->[light] C6H12O6 + 6O2} :: biology
+Haber process :: \ce{N2 + 3H2 <=>[Fe][450 ^\circ C] 2NH3} :: equilibrium ammonia
+Rusting of iron :: \ce{4Fe + 3O2 -> 2Fe2O3} :: oxidation
+Neutralization :: \ce{HCl + NaOH -> NaCl + H2O} :: acid base
+Precipitation :: \ce{AgNO3(aq) + NaCl(aq) -> AgCl(s) + NaNO3(aq)} :: precipitate states
+Limestone decomposition :: \ce{CaCO3 ->[\Delta] CaO + CO2 ^} :: thermal decomposition gas
+Zinc and acid :: \ce{Zn + 2HCl -> ZnCl2 + H2 ^} :: single displacement
+Electrolysis of water :: \ce{2H2O ->[electrolysis] 2H2 + O2} :: electrolysis
+Esterification :: \ce{CH3COOH + C2H5OH <=>[H2SO4] CH3COOC2H5 + H2O} :: organic equilibrium
+Permanganate redox (ionic) :: \ce{MnO4^- + 5Fe^2+ + 8H^+ -> Mn^2+ + 5Fe^3+ + 4H2O} :: redox ions
+Dichromate half-reaction :: \ce{Cr2O7^2- + 14H^+ + 6e^- -> 2Cr^3+ + 7H2O} :: redox electrons
+Copper half-reaction :: \ce{Cu^2+ + 2e^- -> Cu} :: reduction electrode
+Copper sulfate pentahydrate :: \ce{CuSO4.5H2O} :: hydrate
+Carbon-14 decay :: \ce{^{14}_{6}C -> ^{14}_{7}N + ^{0}_{-1}e} :: nuclear isotope beta
+Alpha decay of uranium :: \ce{^{238}_{92}U -> ^{234}_{90}Th + ^{4}_{2}He} :: nuclear alpha
+Ammonium ion :: \ce{NH4+} :: ion charge
+Sulfate ion :: \ce{SO4^2-} :: ion charge
+Hexacyanoferrate(III) :: \ce{[Fe(CN)6]^3-} :: complex ion coordination
+
+## Chemistry / Equilibrium, kinetics and solutions
+Equilibrium constant :: K_c = \frac{[\mathrm{C}]^c [\mathrm{D}]^d}{[\mathrm{A}]^a [\mathrm{B}]^b} :: equilibrium
+pH definition :: \mathrm{pH} = -\log_{10} \left[\mathrm{H}^{+}\right] :: acidity
+pOH relation :: \mathrm{pH} + \mathrm{pOH} = 14 :: acidity
+Water autoionization :: K_w = \left[\mathrm{H}^{+}\right]\left[\mathrm{OH}^{-}\right] = 1.0 \times 10^{-14} :: water
+Acid dissociation :: K_a = \frac{\left[\mathrm{H}^{+}\right]\left[\mathrm{A}^{-}\right]}{[\mathrm{HA}]} :: acid
+Henderson-Hasselbalch :: \mathrm{pH} = \mathrm{p}K_a + \log_{10} \frac{\left[\mathrm{A}^{-}\right]}{[\mathrm{HA}]} :: buffer
+Rate law :: r = k[\mathrm{A}]^m [\mathrm{B}]^n :: kinetics
+Arrhenius equation :: k = A e^{-\frac{E_a}{RT}} :: activation energy
+First-order integrated rate law :: \ln[\mathrm{A}]_t = \ln[\mathrm{A}]_0 - kt :: kinetics
+Molarity :: c = \frac{n}{V} :: concentration
+Dilution :: c_1 V_1 = c_2 V_2 :: concentration
+Moles :: n = \frac{m}{M} :: amount
+Avogadro's number :: N = n N_A, \quad N_A = 6.022 \times 10^{23} \, \mathrm{mol}^{-1} :: constant
+Nernst equation :: E = E^{\circ} - \frac{RT}{nF} \ln Q :: electrochemistry
+Gibbs and equilibrium :: \Delta G^{\circ} = -RT \ln K :: thermodynamics
+Beer-Lambert law :: A = \varepsilon l c :: absorbance spectroscopy
+Raoult's law :: p_A = x_A p_A^{*} :: vapor pressure
+Combined gas law :: \frac{p_1 V_1}{T_1} = \frac{p_2 V_2}{T_2} :: gas
+Van der Waals equation :: \left(p + \frac{a n^2}{V^2}\right)(V - nb) = nRT :: real gas
+
+## Science / Units and constants
+Speed of light value :: c = 299\,792\,458 \, \mathrm{m\,s^{-1}} :: constant
+Planck constant :: h = 6.626\,070\,15 \times 10^{-34} \, \mathrm{J\,s} :: constant
+Gravitational constant :: G = 6.674 \times 10^{-11} \, \mathrm{N\,m^2\,kg^{-2}} :: constant
+Elementary charge :: e = 1.602\,176\,634 \times 10^{-19} \, \mathrm{C} :: constant
+Boltzmann constant :: k_B = 1.380\,649 \times 10^{-23} \, \mathrm{J\,K^{-1}} :: constant
+Gas constant :: R = 8.314 \, \mathrm{J\,mol^{-1}\,K^{-1}} :: constant
+Standard gravity :: g = 9.806\,65 \, \mathrm{m\,s^{-2}} :: acceleration
+Vacuum permittivity :: \varepsilon_0 = 8.854 \times 10^{-12} \, \mathrm{F\,m^{-1}} :: constant
+Newton (derived unit) :: 1 \, \mathrm{N} = 1 \, \mathrm{kg\,m\,s^{-2}} :: SI derived
+Joule (derived unit) :: 1 \, \mathrm{J} = 1 \, \mathrm{N\,m} = 1 \, \mathrm{kg\,m^2\,s^{-2}} :: SI derived
+Scientific notation :: 6.02 \times 10^{23} :: exponent
+Unit conversion :: 1 \, \mathrm{km\,h^{-1}} = \frac{1000 \, \mathrm{m}}{3600 \, \mathrm{s}} \approx 0.278 \, \mathrm{m\,s^{-1}} :: conversion
+Temperature conversion :: T_{\mathrm{K}} = T_{^{\circ}\mathrm{C}} + 273.15 :: kelvin celsius
