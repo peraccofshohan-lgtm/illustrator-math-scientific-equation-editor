@@ -335,4 +335,11 @@ module.exports = function (t) {
     const h = UI.c.help.text;
     ['\\frac', 'Ctrl/Cmd+Enter', 'RE-EDITING', 'STIX Two Math', 'never executed'].forEach(s => t.ok(h.indexOf(s) >= 0, s));
   });
+  t.test('home quick-start buttons switch tabs using tab objects', () => {
+    const { UI, win } = boot();
+    click(win, 'Type Syntax');
+    t.eq(UI.c.tabs.selection.text, 'Direct Input');
+    click(win, 'Browse Templates');
+    t.eq(UI.c.tabs.selection.text, 'Templates');
+  });
 };

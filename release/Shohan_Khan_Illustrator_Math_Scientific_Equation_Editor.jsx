@@ -5691,11 +5691,28 @@ Renderer.placement = function (doc, layout, opts) {
     } catch (e2) { return [0, 0]; }
 };
 
+/* All coordinates used by the renderer (view centre, artboard rectangle, item
+   bounds, new point text) are taken in document coordinates; the user's
+   app.coordinateSystem setting is restored afterwards. */
+Renderer.useDocumentCoordinates = function () {
+    var old = null;
+    try {
+        if (typeof CoordinateSystem !== 'undefined' && app.coordinateSystem !== undefined) {
+            old = app.coordinateSystem;
+            app.coordinateSystem = CoordinateSystem.DOCUMENTCOORDINATESYSTEM;
+        }
+    } catch (e) { old = null; }
+    return old;
+};
+Renderer.restoreCoordinates = function (old) {
+    if (old === null || old === undefined) { return; }
+    try { app.coordinateSystem = old; } catch (e) { /* ignore */ }
+};
 /* Main entry. opts: {latex, mode, position, replaceItem, name}
    Returns {ok, item, mode, warnings, stats}. Throws MathError on failure (after rollback). */
 Renderer.insert = function (root, settings, opts) {
     var ctx = Renderer.checkDocument(), doc = ctx.doc, layer = ctx.layer, plan, metrics = null, layout, created = [], group = null,
-        mode = opts.mode || 'group', colorCache = {}, i, p, origin, item, single, oldVisible = null, warnings = [], plain, stats = { text: 0, paths: 0, rules: 0 };
+        mode = opts.mode || 'group', colorCache = {}, i, p, origin, item, single, oldVisible = null, oldCS = null, warnings = [], plain, stats = { text: 0, paths: 0, rules: 0 };
     settings = Formatting.clean(settings);
     if (!U.contains(Renderer.MODES, mode)) { mode = 'group'; }
     if (!root.items.length) { throw new MathError(ErrorKind.STRUCTURE, 'The equation is empty. Type or build an equation first.'); }
@@ -5706,6 +5723,7 @@ Renderer.insert = function (root, settings, opts) {
         single = Serializer.toSingleText(root);
         if (!single.ok) { throw new MathError(ErrorKind.RENDER, 'Single text mode is not possible: ' + single.reason + ' Use "Editable group" instead.'); }
     }
+    oldCS = Renderer.useDocumentCoordinates();
     try {
         if (opts.replaceItem) {
             try { oldVisible = opts.replaceItem.hidden; opts.replaceItem.hidden = true; } catch (eh) { oldVisible = null; }
@@ -5747,9 +5765,11 @@ Renderer.insert = function (root, settings, opts) {
     } catch (e) {
         if (metrics) { metrics.dispose(); }
         Renderer.rollback(created);
+        Renderer.restoreCoordinates(oldCS);
         if (opts.replaceItem && oldVisible !== null) { try { opts.replaceItem.hidden = oldVisible; } catch (eh2) { /* ignore */ } }
         throw (e instanceof MathError) ? e : new MathError(ErrorKind.RENDER, 'Insertion failed and was rolled back: ' + (e.message || e), (e.line ? 'line ' + e.line : ''));
     }
+    Renderer.restoreCoordinates(oldCS);
     for (i = 0; i < plan.warnings.length; i++) { if (!U.contains(warnings, plan.warnings[i])) { warnings.push(plan.warnings[i]); } }
     return { ok: true, item: item, mode: mode, warnings: warnings, stats: stats, fonts: { math: plan.math, text: plan.text } };
 };
@@ -7065,6 +7085,11 @@ UI.showText = function (title, text) {
     g.add('button', undefined, 'Close', { name: 'ok' });
     d.show();
 };
+/* ScriptUI tabbed panels take the tab object (not an index) as selection. */
+UI.showTab = function (name) {
+    var t = UI.c.tab[name];
+    if (t) { UI.c.tabs.selection = t; UI.onTabShown(name); }
+};
 UI.truncate = function (s, n) { s = String(s); return s.length > n ? s.substring(0, n - 1) + '\u2026' : s; };
 
 /* ---- application ----------------------------------------------------------------- */
@@ -7140,7 +7165,7 @@ UI.build = function () {
     UI.buildFormatting(c.tab['Formatting']);
     UI.buildSettings(c.tab['Settings']);
     UI.buildHelp(c.tab['Help / About']);
-    tp.selection = U.clamp(UI.prefs.lastTab || 0, 0, UI.TABS.length - 1);
+    tp.selection = c.tab[UI.TABS[U.clamp(UI.prefs.lastTab || 0, 0, UI.TABS.length - 1)]];
     tp.onChange = UI.safe(function () {
         var idx = tp.selection ? U.indexOf(UI.TABS, tp.selection.text) : 0;
         UI.prefs.lastTab = idx;
@@ -7334,12 +7359,12 @@ UI.buildHome = function (t) {
     p = UI.panel(left, 'Quick start');
     g = UI.row(p);
     UI.btn(g, 'New Equation', 'Start an empty equation', function () { UI.c.btnNew.notify('onClick'); });
-    UI.btn(g, 'Type Syntax', 'Open Direct Input', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Direct Input'); });
-    UI.btn(g, 'Build Visually', 'Open the Equation Builder', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Equation Builder'); });
+    UI.btn(g, 'Type Syntax', 'Open Direct Input', function () { UI.showTab('Direct Input'); });
+    UI.btn(g, 'Build Visually', 'Open the Equation Builder', function () { UI.showTab('Equation Builder'); });
     g = UI.row(p);
-    UI.btn(g, 'Browse Templates', 'Open the template library', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Templates'); });
-    UI.btn(g, 'Symbols', 'Open the symbol browser', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Symbols'); });
-    UI.btn(g, 'Help', 'Open Help / About', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Help / About'); });
+    UI.btn(g, 'Browse Templates', 'Open the template library', function () { UI.showTab('Templates'); });
+    UI.btn(g, 'Symbols', 'Open the symbol browser', function () { UI.showTab('Symbols'); });
+    UI.btn(g, 'Help', 'Open Help / About', function () { UI.showTab('Help / About'); });
     p = UI.panel(left, 'Global search (symbols, templates, saved formulas)');
     g = UI.row(p);
     c.gsearch = UI.field(g, '', 330, 'Type words such as "integral", "maxwell", "alpha", "sulfate"');

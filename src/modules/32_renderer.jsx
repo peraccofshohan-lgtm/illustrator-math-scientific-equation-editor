@@ -298,11 +298,28 @@ Renderer.placement = function (doc, layout, opts) {
     } catch (e2) { return [0, 0]; }
 };
 
+/* All coordinates used by the renderer (view centre, artboard rectangle, item
+   bounds, new point text) are taken in document coordinates; the user's
+   app.coordinateSystem setting is restored afterwards. */
+Renderer.useDocumentCoordinates = function () {
+    var old = null;
+    try {
+        if (typeof CoordinateSystem !== 'undefined' && app.coordinateSystem !== undefined) {
+            old = app.coordinateSystem;
+            app.coordinateSystem = CoordinateSystem.DOCUMENTCOORDINATESYSTEM;
+        }
+    } catch (e) { old = null; }
+    return old;
+};
+Renderer.restoreCoordinates = function (old) {
+    if (old === null || old === undefined) { return; }
+    try { app.coordinateSystem = old; } catch (e) { /* ignore */ }
+};
 /* Main entry. opts: {latex, mode, position, replaceItem, name}
    Returns {ok, item, mode, warnings, stats}. Throws MathError on failure (after rollback). */
 Renderer.insert = function (root, settings, opts) {
     var ctx = Renderer.checkDocument(), doc = ctx.doc, layer = ctx.layer, plan, metrics = null, layout, created = [], group = null,
-        mode = opts.mode || 'group', colorCache = {}, i, p, origin, item, single, oldVisible = null, warnings = [], plain, stats = { text: 0, paths: 0, rules: 0 };
+        mode = opts.mode || 'group', colorCache = {}, i, p, origin, item, single, oldVisible = null, oldCS = null, warnings = [], plain, stats = { text: 0, paths: 0, rules: 0 };
     settings = Formatting.clean(settings);
     if (!U.contains(Renderer.MODES, mode)) { mode = 'group'; }
     if (!root.items.length) { throw new MathError(ErrorKind.STRUCTURE, 'The equation is empty. Type or build an equation first.'); }
@@ -313,6 +330,7 @@ Renderer.insert = function (root, settings, opts) {
         single = Serializer.toSingleText(root);
         if (!single.ok) { throw new MathError(ErrorKind.RENDER, 'Single text mode is not possible: ' + single.reason + ' Use "Editable group" instead.'); }
     }
+    oldCS = Renderer.useDocumentCoordinates();
     try {
         if (opts.replaceItem) {
             try { oldVisible = opts.replaceItem.hidden; opts.replaceItem.hidden = true; } catch (eh) { oldVisible = null; }
@@ -354,9 +372,11 @@ Renderer.insert = function (root, settings, opts) {
     } catch (e) {
         if (metrics) { metrics.dispose(); }
         Renderer.rollback(created);
+        Renderer.restoreCoordinates(oldCS);
         if (opts.replaceItem && oldVisible !== null) { try { opts.replaceItem.hidden = oldVisible; } catch (eh2) { /* ignore */ } }
         throw (e instanceof MathError) ? e : new MathError(ErrorKind.RENDER, 'Insertion failed and was rolled back: ' + (e.message || e), (e.line ? 'line ' + e.line : ''));
     }
+    Renderer.restoreCoordinates(oldCS);
     for (i = 0; i < plan.warnings.length; i++) { if (!U.contains(warnings, plan.warnings[i])) { warnings.push(plan.warnings[i]); } }
     return { ok: true, item: item, mode: mode, warnings: warnings, stats: stats, fonts: { math: plan.math, text: plan.text } };
 };

@@ -132,6 +132,11 @@ UI.showText = function (title, text) {
     g.add('button', undefined, 'Close', { name: 'ok' });
     d.show();
 };
+/* ScriptUI tabbed panels take the tab object (not an index) as selection. */
+UI.showTab = function (name) {
+    var t = UI.c.tab[name];
+    if (t) { UI.c.tabs.selection = t; UI.onTabShown(name); }
+};
 UI.truncate = function (s, n) { s = String(s); return s.length > n ? s.substring(0, n - 1) + '\u2026' : s; };
 
 /* ---- application ----------------------------------------------------------------- */
@@ -207,7 +212,7 @@ UI.build = function () {
     UI.buildFormatting(c.tab['Formatting']);
     UI.buildSettings(c.tab['Settings']);
     UI.buildHelp(c.tab['Help / About']);
-    tp.selection = U.clamp(UI.prefs.lastTab || 0, 0, UI.TABS.length - 1);
+    tp.selection = c.tab[UI.TABS[U.clamp(UI.prefs.lastTab || 0, 0, UI.TABS.length - 1)]];
     tp.onChange = UI.safe(function () {
         var idx = tp.selection ? U.indexOf(UI.TABS, tp.selection.text) : 0;
         UI.prefs.lastTab = idx;
@@ -401,12 +406,12 @@ UI.buildHome = function (t) {
     p = UI.panel(left, 'Quick start');
     g = UI.row(p);
     UI.btn(g, 'New Equation', 'Start an empty equation', function () { UI.c.btnNew.notify('onClick'); });
-    UI.btn(g, 'Type Syntax', 'Open Direct Input', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Direct Input'); });
-    UI.btn(g, 'Build Visually', 'Open the Equation Builder', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Equation Builder'); });
+    UI.btn(g, 'Type Syntax', 'Open Direct Input', function () { UI.showTab('Direct Input'); });
+    UI.btn(g, 'Build Visually', 'Open the Equation Builder', function () { UI.showTab('Equation Builder'); });
     g = UI.row(p);
-    UI.btn(g, 'Browse Templates', 'Open the template library', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Templates'); });
-    UI.btn(g, 'Symbols', 'Open the symbol browser', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Symbols'); });
-    UI.btn(g, 'Help', 'Open Help / About', function () { UI.c.tabs.selection = U.indexOf(UI.TABS, 'Help / About'); });
+    UI.btn(g, 'Browse Templates', 'Open the template library', function () { UI.showTab('Templates'); });
+    UI.btn(g, 'Symbols', 'Open the symbol browser', function () { UI.showTab('Symbols'); });
+    UI.btn(g, 'Help', 'Open Help / About', function () { UI.showTab('Help / About'); });
     p = UI.panel(left, 'Global search (symbols, templates, saved formulas)');
     g = UI.row(p);
     c.gsearch = UI.field(g, '', 330, 'Type words such as "integral", "maxwell", "alpha", "sulfate"');

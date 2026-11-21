@@ -1,10 +1,10 @@
 {
- "date": "2026-11-21T16:56:49.722Z",
+ "date": "2026-11-21T16:58:58.032Z",
  "node": "v22.22.3",
- "total": 129,
- "passed": 129,
+ "total": 138,
+ "passed": 138,
  "failed": 0,
- "ms": 8642,
+ "ms": 8844,
  "suites": {
   "chemistry-tests/chemistry": {
    "passed": 8,
@@ -14,8 +14,12 @@
    "passed": 6,
    "failed": 0
   },
+  "integration-tests/es3-runtime": {
+   "passed": 7,
+   "failed": 0
+  },
   "integration-tests/renderer": {
-   "passed": 16,
+   "passed": 17,
    "failed": 0
   },
   "layout-tests/layout": {
@@ -47,7 +51,7 @@
    "failed": 0
   },
   "ui-tests/ui": {
-   "passed": 20,
+   "passed": 21,
    "failed": 0
   }
  },
@@ -121,6 +125,41 @@
   {
    "suite": "formatting-tests/formatting",
    "name": "font detection with a mocked app.textFonts list",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "script loads with ES5 built-ins removed",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: every template parses, serialises, round-trips and lays out",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: every symbol snippet parses and lays out",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: chemistry balancing and molar mass",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: JSONX, store save/load/import/export",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: model editing, undo/redo and all editor operations",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/es3-runtime",
+   "name": "ES3: full UI launch, preview drawing and insertion into the mock document",
    "ok": true
   },
   {
@@ -201,6 +240,11 @@
   {
    "suite": "integration-tests/renderer",
    "name": "every template inserts into the mock document without error",
+   "ok": true
+  },
+  {
+   "suite": "integration-tests/renderer",
+   "name": "insertion works in document coordinates and restores the user setting",
    "ok": true
   },
   {
@@ -696,6 +740,11 @@
   {
    "suite": "ui-tests/ui",
    "name": "help text documents syntax, shortcuts and re-editing",
+   "ok": true
+  },
+  {
+   "suite": "ui-tests/ui",
+   "name": "home quick-start buttons switch tabs using tab objects",
    "ok": true
   }
  ]

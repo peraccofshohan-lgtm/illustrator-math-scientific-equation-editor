@@ -196,4 +196,16 @@ module.exports = function (t) {
     });
     t.eq(n, s.M.Templates.items.length);
   });
+  t.test('insertion works in document coordinates and restores the user setting', () => {
+    const s = setup();
+    let seen = null;
+    const orig = s.M.Renderer.placement;
+    s.M.Renderer.placement = function () { seen = s.env.app.coordinateSystem; return orig.apply(this, arguments); };
+    s.M.Renderer.insert(parse(s.M, 'x'), s.M.Formatting.defaults(), { mode: 'group' });
+    t.eq(seen, 0, 'document coordinates during insertion');
+    t.eq(s.env.app.coordinateSystem, 1, 'artboard setting restored');
+    s.env.env.failAt = s.env.env.created + 3;
+    t.throws(() => s.M.Renderer.insert(parse(s.M, 'a+b'), s.M.Formatting.defaults(), { mode: 'group' }));
+    t.eq(s.env.app.coordinateSystem, 1, 'restored after failure');
+  });
 };

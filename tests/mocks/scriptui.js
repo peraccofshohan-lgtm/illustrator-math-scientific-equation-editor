@@ -12,7 +12,7 @@ class Control {
     this.visible = true; this.enabled = true; this.helpTip = ''; this.value = false; this.listeners = {};
     this.items = []; this.selection = null; this.id = ++counter;
     this.graphics = new Graphics();
-    if (type === 'dropdownlist' || type === 'listbox') { if (Array.isArray(text)) { text.forEach(t => this.add('item', t)); } }
+    if (type === 'dropdownlist' || type === 'listbox') { if (Array.isArray(text)) { for (let i = 0; i < text.length; i++) { this.add('item', text[i]); } } }
     Object.defineProperty(this, 'selection', {
       get: () => this._sel || null,
       set: (v) => {

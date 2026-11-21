@@ -115,7 +115,7 @@ class PathItem extends PageItem {
   constructor(env, parent) { super(env, parent, 'PathItem'); this.points = []; this.closed = false; this.filled = false; this.stroked = false; }
   setEntirePath(pts) {
     for (const p of pts) { if (!isFinite(p[0]) || !isFinite(p[1])) { throw new Error('Invalid point ' + p); } }
-    this.points = pts.map(p => [p[0], p[1]]);
+    this.points = Array.from(pts).map(p => [p[0], p[1]]);
     this.pathPoints = makeIndexed({ _items: this.points.map(a => ({ anchor: a, leftDirection: a, rightDirection: a, pointType: null })), get length() { return this._items.length; } });
   }
   _shift(dx, dy) { this.points = this.points.map(p => [p[0] + dx, p[1] + dy]); }
@@ -148,7 +148,8 @@ function install(sandbox, opts) {
     get activeDocument() { if (!docs.length) { throw new Error('There is no document'); } return docs[0]; },
     textFonts: { getByName(n) { if (env.fonts.indexOf(n) < 0) { throw new Error('No such font ' + n); } return { name: n }; } },
     redraw() {},
-    coordinateSystem: 1
+    coordinateSystem: 1,
+    csLog: []
   };
   if (!opts.noDocument) { docs.push(new Document(env, opts)); }
   Object.assign(sandbox, {
@@ -160,7 +161,8 @@ function install(sandbox, opts) {
     StrokeCap: { ROUNDENDCAP: 1, BUTTENDCAP: 0 },
     StrokeJoin: { ROUNDENDJOIN: 1, MITERENDJOIN: 0 },
     ElementPlacement: { PLACEATBEGINNING: 'PLACEATBEGINNING' },
-    AutoKernType: { NOAUTOKERN: 0 }
+    AutoKernType: { NOAUTOKERN: 0 },
+    CoordinateSystem: { DOCUMENTCOORDINATESYSTEM: 0, ARTBOARDCOORDINATESYSTEM: 1 }
   });
   return { env, app, docs, newDocument: (o) => { const d = new Document(env, o); docs.unshift(d); return d; } };
 }
