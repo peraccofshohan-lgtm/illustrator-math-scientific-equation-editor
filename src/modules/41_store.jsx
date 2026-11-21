@@ -258,6 +258,7 @@ Store.Library.prototype.addFormula = function (rec, kind) {
     if (!c) { throw new MathError(ErrorKind.VALIDATION, 'The formula is empty or too large.'); }
     if (list.length >= max) { throw new MathError(ErrorKind.VALIDATION, 'The library is full (' + max + ' items). Delete some items first.'); }
     c.id = U.uid(kind === 'template' ? 'ct' : 'f');
+    c.name = Store.uniqueName(this, c.name, kind);
     c.created = c.modified = U.isoDate();
     list.unshift(c);
     return c;
@@ -268,7 +269,7 @@ Store.Library.prototype.updateFormula = function (id, patch) {
     if (U.has(patch, 'latex')) { this.validateLatex(patch.latex); }
     for (k in patch) {
         if (!U.has(patch, k)) { continue; }
-        if (k === 'name') { f.name = U.trim(Store.str(patch.name, Store.LIMITS.name)) || f.name; }
+        if (k === 'name') { f.name = Store.uniqueName(this, U.trim(Store.str(patch.name, Store.LIMITS.name)) || f.name, U.contains(this.data.templates, f) ? 'template' : 'formula', f); }
         else if (k === 'latex') { f.latex = Store.str(patch.latex, Store.LIMITS.latex); }
         else if (k === 'category') { f.category = U.trim(Store.str(patch.category, 80)) || f.category; }
         else if (k === 'note') { f.note = Store.str(patch.note, Store.LIMITS.note); }
@@ -288,9 +289,9 @@ Store.Library.prototype.duplicateFormula = function (id) {
     c.favorite = false;
     return this.addFormula(c, kind);
 };
-Store.uniqueName = function (lib, name, kind) {
+Store.uniqueName = function (lib, name, kind, except) {
     var list = kind === 'template' ? lib.data.templates : lib.data.formulas, n = name, i = 2;
-    function taken(x) { return !!U.find(list, function (f) { return f.name === x; }); }
+    function taken(x) { return !!U.find(list, function (f) { return f !== except && f.name === x; }); }
     while (taken(n)) { n = name + ' ' + i; i++; }
     return n;
 };
@@ -374,7 +375,8 @@ Store.Library.prototype.importText = function (text, opts) {
             c = Store.cleanFormula(src[i], kind);
             if (!c) { rep.invalid.push({ name: (src[i] && src[i].name) ? Store.str(src[i].name, 60) : '#' + (i + 1), reason: 'missing or invalid source' }); continue; }
             try { self.validateLatex(c.latex); } catch (pe) { rep.invalid.push({ name: c.name, reason: 'syntax error: ' + (pe.message || pe) }); continue; }
-            dup = U.find(list, function (f) { return f.latex === c.latex && f.name === c.name; });
+            /* same source under the same name, or under the name given by an earlier import */
+            dup = U.find(list, function (f) { return f.latex === c.latex && (f.name === c.name || f.name.indexOf(c.name + ' (imported') === 0); });
             if (dup) { rep.skipped++; continue; }
             if (list.length >= max) { rep.invalid.push({ name: c.name, reason: 'library full' }); continue; }
             if (U.find(list, function (f) { return f.name === c.name; })) { c.name = Store.uniqueName(self, c.name + ' (imported)', kind); rep.renamed++; }

@@ -1,11 +1,15 @@
 {
- "date": "2026-11-21T16:47:58.920Z",
+ "date": "2026-11-21T16:49:50.474Z",
  "node": "v22.22.3",
- "total": 76,
- "passed": 76,
+ "total": 95,
+ "passed": 95,
  "failed": 0,
- "ms": 2016,
+ "ms": 2170,
  "suites": {
+  "chemistry-tests/chemistry": {
+   "passed": 8,
+   "failed": 0
+  },
   "integration-tests/renderer": {
    "passed": 16,
    "failed": 0
@@ -16,6 +20,10 @@
   },
   "parser-tests/parser": {
    "passed": 14,
+   "failed": 0
+  },
+  "persistence-tests/store": {
+   "passed": 11,
    "failed": 0
   },
   "structure-tests/editor": {
@@ -29,6 +37,46 @@
  },
  "failures": [],
  "tests": [
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "118 elements with consistent data",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "balances molecular reactions",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "balances ionic / redox equations with charge conservation",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "states, hydrates and conditions are preserved",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "impossible, ambiguous and malformed reactions are rejected with explanations",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "molar mass with nested groups and hydrates",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "\\ce notation renders upright formulas with subscripts, charges and arrows",
+   "ok": true
+  },
+  {
+   "suite": "chemistry-tests/chemistry",
+   "name": "exact rational arithmetic: large coefficients stay integral",
+   "ok": true
+  },
   {
    "suite": "integration-tests/renderer",
    "name": "editable group: named group with text frames, rule, note",
@@ -247,6 +295,61 @@
   {
    "suite": "parser-tests/parser",
    "name": "plain-text and single-text conversion",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "default adapter uses the user data folder",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "CRUD: add, update, rename, duplicate, favorite, delete, search",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "recents and favorite symbols are bounded and de-duplicated",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "file adapter: save, reload, backup and .tmp cleanup",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "corrupt main file: recovers from backup and keeps a copy of the damaged file",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "save never overwrites the backup with an unreadable main file",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "write failure is reported and does not corrupt existing data",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "export/import round-trip with duplicate skipping and renaming",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "import rejects wrong format, invalid entries and never executes content",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "JSONX: strict parser rejects JavaScript, accepts JSON, round-trips unicode",
+   "ok": true
+  },
+  {
+   "suite": "persistence-tests/store",
+   "name": "large library: 5000 formulas save and load",
    "ok": true
   },
   {

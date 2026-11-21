@@ -71,9 +71,18 @@ U.round = function (v, d) { var m = Math.pow(10, d || 0); return Math.round(v * 
 U.now = function () { return new Date().getTime(); };
 U.max = function (a, b) { return a > b ? a : b; };
 U.min = function (a, b) { return a < b ? a : b; };
+/* Strict number parsing for user input and stored data: the whole string must
+   be a decimal number (comma accepted as decimal separator). Returns the
+   fallback, or null, for anything else (never NaN / Infinity / undefined). */
 U.toNumber = function (s, fallback) {
-    var n = parseFloat(String(s).replace(',', '.'));
-    return U.isNumber(n) ? n : fallback;
+    var t, n;
+    fallback = (fallback === undefined) ? null : fallback;
+    if (typeof s === 'number') { return (isFinite(s) && !isNaN(s)) ? s : fallback; }
+    if (typeof s !== 'string') { return fallback; }
+    t = U.trim(s).replace(',', '.');
+    if (!/^[+\-]?(\d+\.?\d*|\.\d+)([eE][+\-]?\d+)?$/.test(t)) { return fallback; }
+    n = parseFloat(t);
+    return (isFinite(n) && !isNaN(n)) ? n : fallback;
 };
 U.isoDate = function (t) {
     var d = new Date(t || U.now());
