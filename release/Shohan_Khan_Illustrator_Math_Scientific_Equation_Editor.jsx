@@ -1,6 +1,6 @@
 /*
  * Adobe Illustrator Advanced Mathematical & Scientific Equation Editor
- * Math & Scientific Equation Editor v1.0.0-rc.1
+ * Math & Scientific Equation Editor v1.0.0
  * Created by Shohan Khan
  * License: MIT  (see LICENSE in the source repository)
  * Source: https://github.com/peraccofshohan-lgtm/illustrator-math-scientific-equation-editor
@@ -28,7 +28,7 @@ MSEE.APP_NAME = 'Math & Scientific Equation Editor';
 MSEE.APP_TITLE_FULL = 'Adobe Illustrator Advanced Mathematical & Scientific Equation Editor';
 MSEE.AUTHOR = 'Shohan Khan';
 MSEE.ATTRIBUTION = 'Created by Shohan Khan';
-MSEE.VERSION = '1.0.0-rc.1';
+MSEE.VERSION = '1.0.0';
 MSEE.DATA_FORMAT = 'MSEE-Library';
 MSEE.DATA_FORMAT_VERSION = 1;
 MSEE.NOTE_PREFIX = 'MSEE:1:';
