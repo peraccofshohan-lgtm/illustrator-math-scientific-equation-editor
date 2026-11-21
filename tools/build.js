@@ -67,7 +67,9 @@ function checkSyntax(code, label) {
   const forbidden = [
     [/\bconst\s/, 'const'], [/\blet\s+[A-Za-z_$]/, 'let'], [/=>/, 'arrow function'], [/`/, 'template literal'],
     [/\.forEach\(/, 'Array.prototype.forEach'], [/\bObject\.keys\(/, 'Object.keys'], [/\bJSON\.(parse|stringify)\(/, 'JSON global'],
-    [/\.trim\(\)/, 'String.prototype.trim'], [/\bArray\.isArray\(/, 'Array.isArray'], [/\.indexOf\([^)]*\)\s*;?\s*\/\/ES5/, 'x']
+    [/\.trim\(\)/, 'String.prototype.trim'], [/\bArray\.isArray\(/, 'Array.isArray'], [/(?<!\bU)\.map\(/, 'Array.prototype.map (use U.map)'], [/(?<!\bU)\.filter\(/, 'Array.prototype.filter (use U.filter)'],
+    [/\.(some|every|reduce|reduceRight|lastIndexOf)\(/, 'ES5 array method'], [/\bDate\.now\(/, 'Date.now'], [/\.bind\(/, 'Function.prototype.bind'],
+    [/\bObject\.(create|defineProperty|defineProperties|freeze|seal|getPrototypeOf|getOwnPropertyNames)\(/, 'ES5 Object method'], [/\.toISOString\(/, 'Date.prototype.toISOString']
   ];
   const stripped = js
     .replace(/\/\*[\s\S]*?\*\//g, '')
