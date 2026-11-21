@@ -14,6 +14,10 @@ var ErrorKind = {
     COMPATIBILITY: 'Compatibility error',
     VALIDATION: 'Validation error',
     CHEMISTRY: 'Chemistry error',
+    DOCUMENT: 'Document error',
+    RENDER: 'Rendering error',
+    PERSISTENCE: 'Data storage error',
+    IMPORT: 'Import error',
     INTERNAL: 'Internal error'
 };
 
